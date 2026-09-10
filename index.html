@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="ALPHA Watches — Define Your Time.">
+<title>ALPHA — Define Your Time</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        ink:'#0B0B0C', coal:'#141416', smoke:'#1D1D20',
+        ivory:'#F4EFE4', bone:'#E9E2D2', gold:'#C6A15B'
+      },
+      fontFamily: {
+        serif:['"Cormorant Garamond"','serif'],
+        sans:['Jost','sans-serif']
+      }
+    }
+  }
+}
+</script>
+
+<style>
+:root{--ink:#0B0B0C;--gold:#C6A15B;--ivory:#F4EFE4}
+*{box-sizing:border-box}
+html{background:var(--ink);scroll-behavior:auto}
+body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-serif;overflow-x:hidden}
+::selection{background:var(--gold);color:var(--ink)}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:var(--ink)}
+::-webkit-scrollbar-thumb{background:#34343a;border-radius:20px}
+::-webkit-scrollbar-thumb:hover{background:var(--gold)}
+.tracking-mega{letter-spacing:.45em}
+.tracking-wide2{letter-spacing:.25em}
+.serif{font-family:"Cormorant Garamond",serif}
+.gold{color:var(--gold)}
+.gold-grad{
+ background:linear-gradient(105deg,#eee0bd,#C6A15B 48%,#80632f);
+ -webkit-background-clip:text;background-clip:text;color:transparent
+}
+.navbar{transition:background .5s,transform .5s,border-color .5s}
+.navbar.scrolled{background:rgba(11,11,12,.82);backdrop-filter:blur(18px);border-color:rgba(198,161,91,.14)}
+.navlink{position:relative}
+.navlink:after{content:"";position:absolute;left:0;right:0;bottom:-7px;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:right;transition:transform .45s cubic-bezier(.22,1,.36,1)}
+.navlink:hover:after{transform:scaleX(1);transform-origin:left}
+#preloader{position:fixed;inset:0;background:var(--ink);z-index:100;display:grid;place-items:center;overflow:hidden;transition:opacity .9s cubic-bezier(.22,1,.36,1),visibility .9s}
+#preloader.hide{opacity:0;visibility:hidden}
+.preloader-inner{width:min(430px,78vw);text-align:center;position:relative;display:flex;flex-direction:column;align-items:center}
+.preloader-mark{position:relative;width:min(360px,72vw);aspect-ratio:1;display:grid;place-items:center}
+.preloader-mark:before{content:'';position:absolute;width:72%;height:72%;border:1px solid rgba(198,161,91,.11);border-radius:50%;transform:scale(.82);opacity:0;animation:haloIn 1.4s .05s cubic-bezier(.22,1,.36,1) forwards}
+.preloader-mark:after{content:'';position:absolute;width:56%;height:1px;left:22%;top:50%;background:linear-gradient(90deg,transparent,rgba(198,161,91,.8),transparent);transform:scaleX(0);transform-origin:center;animation:scanLine 1.25s .35s cubic-bezier(.22,1,.36,1) forwards}
+.preloader-logo{width:100%;height:100%;object-fit:contain;display:block;opacity:0;clip-path:inset(100% 0 0 0);filter:blur(5px);transform:scale(.985);animation:logoLoadReveal 2.2s .15s cubic-bezier(.76,0,.24,1) forwards}
+.preloader-loading{width:min(230px,62vw);margin-top:-12px;position:relative;z-index:2}
+.preloader-track{height:1px;background:rgba(244,239,228,.10);overflow:hidden}
+.preloader-progress{display:block;width:0;height:100%;background:linear-gradient(90deg,#80632f,#C6A15B,#eee0bd);box-shadow:0 0 12px rgba(198,161,91,.35)}
+.preloader-meta{margin-top:12px;display:flex;align-items:center;justify-content:space-between;color:rgba(244,239,228,.35);font-size:8px;letter-spacing:.38em}
+.preloader-percent{color:rgba(244,239,228,.65);letter-spacing:.16em;font-variant-numeric:tabular-nums;min-width:42px;text-align:right}
+.preloader-kicker{margin-top:18px;font-size:8px;letter-spacing:.48em;color:rgba(244,239,228,.28);opacity:0;transform:translateY(5px);animation:kickerIn .8s 1.35s ease forwards}
+@keyframes haloIn{to{opacity:1;transform:scale(1)}}
+@keyframes scanLine{0%{transform:scaleX(0);opacity:0}20%{opacity:1}100%{transform:scaleX(1);opacity:0}}
+@keyframes logoLoadReveal{0%{opacity:0;clip-path:inset(100% 0 0 0);filter:blur(5px);transform:scale(.985)}18%{opacity:1}72%{clip-path:inset(0 0 8% 0);filter:blur(.5px);transform:scale(1)}100%{opacity:1;clip-path:inset(0);filter:blur(0);transform:scale(1)}}
+@keyframes kickerIn{to{opacity:1;transform:none}}
+.hero{height:100svh;min-height:680px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:
+ radial-gradient(circle at 50% 48%,rgba(198,161,91,.14),transparent 24%),
+ radial-gradient(circle at 50% 60%,rgba(255,255,255,.035),transparent 48%),
+ #0B0B0C}
+.grid-bg{position:absolute;inset:0;opacity:.14;background-image:linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px);background-size:80px 80px;mask-image:linear-gradient(to bottom,transparent,black 18%,black 75%,transparent)}
+.hero-title{font-size:clamp(4.8rem,15vw,15rem);line-height:.78;letter-spacing:-.055em;font-weight:400}
+.hero-watch{position:absolute;left:50%;top:52%;width:min(45vw,520px);min-width:280px;filter:drop-shadow(0 45px 70px rgba(0,0,0,.72));will-change:transform}
+.hero-copy{position:absolute;z-index:4;inset:0;pointer-events:none}
+.hero-copy .top{position:absolute;left:6vw;top:20%;max-width:290px}
+.hero-copy .bottom{position:absolute;right:6vw;bottom:14%;max-width:270px;text-align:right}
+.scroll-cue{position:absolute;z-index:5;bottom:28px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:.38em;color:rgba(244,239,228,.55)}
+.scroll-cue:after{content:"";display:block;width:1px;height:52px;background:linear-gradient(var(--gold),transparent);margin:12px auto 0}
+.mini-label{font-size:9px;letter-spacing:.42em;color:var(--gold)}
+.rule{height:1px;background:linear-gradient(90deg,transparent,rgba(198,161,91,.8),transparent)}
+.story{position:relative}
+.story-panel{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden}
+.story-word{font-size:clamp(5rem,14vw,13rem);line-height:.72;letter-spacing:-.06em;color:rgba(244,239,228,.055);white-space:nowrap;position:absolute;left:-2vw;top:13vh}
+.detail-orbit{position:absolute;width:38vw;height:38vw;max-width:520px;max-height:520px;border:1px solid rgba(198,161,91,.22);border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);box-shadow:0 0 100px rgba(198,161,91,.06)}
+.detail-orbit:before,.detail-orbit:after{content:"";position:absolute;border:1px solid rgba(244,239,228,.07);border-radius:50%;inset:10%}
+.detail-orbit:after{inset:24%}
+.detail-watch{position:relative;width:min(31vw,430px);min-width:250px;filter:drop-shadow(0 40px 70px rgba(0,0,0,.75))}
+.feature-list{border-top:1px solid rgba(244,239,228,.12)}
+.feature{padding:22px 0;border-bottom:1px solid rgba(244,239,228,.12);display:flex;justify-content:space-between;gap:20px}
+.feature span:last-child{color:rgba(244,239,228,.45);text-align:right}
+.collection-card{position:relative;overflow:hidden;background:#111214;border:1px solid rgba(255,255,255,.08);transition:transform .6s cubic-bezier(.22,1,.36,1),border-color .6s}
+.collection-card:hover{transform:translateY(-10px);border-color:rgba(198,161,91,.55)}
+.collection-card img{transition:transform 1s cubic-bezier(.22,1,.36,1);filter:drop-shadow(0 30px 40px rgba(0,0,0,.55))}
+.collection-card:hover img{transform:scale(1.06) rotate(-2deg)}
+.card-glow{position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(198,161,91,.12);filter:blur(70px);left:50%;top:45%;transform:translate(-50%,-50%)}
+.video-wrap{position:relative;height:min(78vh,760px);overflow:hidden;background:#111}
+.video-wrap video{width:100%;height:100%;object-fit:cover;opacity:.68}
+.video-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,11,12,.85),rgba(11,11,12,.2),rgba(11,11,12,.8))}
+.magnetic{transition:transform .2s ease}
+.cta{min-height:85vh;display:grid;place-items:center;position:relative;overflow:hidden}
+.cta:before{content:"";position:absolute;width:55vw;height:55vw;border:1px solid rgba(198,161,91,.12);border-radius:50%;box-shadow:0 0 140px rgba(198,161,91,.08) inset}
+.reveal{opacity:0;transform:translateY(45px)}
+.reveal-left{opacity:0;transform:translateX(-45px)}
+.reveal-right{opacity:0;transform:translateX(45px)}
+.footer-glow{position:absolute;width:420px;height:420px;right:-140px;top:-120px;border-radius:50%;background:rgba(198,161,91,.08);filter:blur(90px);pointer-events:none}
+.social-link{width:42px;height:42px;border:1px solid rgba(244,239,228,.16);display:flex;align-items:center;justify-content:center;color:rgba(244,239,228,.58);position:relative;overflow:hidden;transition:color .35s,border-color .35s,transform .35s}
+.social-link:before{content:'';position:absolute;inset:0;background:#C6A15B;transform:translateY(102%);transition:transform .45s cubic-bezier(.22,1,.36,1)}
+.social-link svg{position:relative;z-index:1}
+.social-link:hover{color:#0B0B0C;border-color:#C6A15B;transform:translateY(-3px)}
+.social-link:hover:before{transform:translateY(0)}
+.footer-reveal{opacity:0;transform:translateY(26px)}
+.scroll-progress{position:fixed;left:0;top:0;width:100%;height:2px;background:rgba(255,255,255,.04);z-index:90;pointer-events:none}
+.scroll-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#80632f,#C6A15B,#eee0bd);transform-origin:left}
+@media(max-width:800px){
+ .hero{min-height:650px}
+ .hero-watch{width:72vw;top:52%}
+ .hero-title{font-size:23vw;position:absolute;top:43%;left:50%;transform:translateX(-50%);z-index:1}
+ .hero-copy .top{left:6vw;top:14%;max-width:210px}
+ .hero-copy .bottom{right:6vw;bottom:12%;max-width:220px}
+ .detail-orbit{width:75vw;height:75vw}
+ .detail-watch{width:62vw}
+}
+@media(prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}
+ *,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+
+<body>
+<div class="scroll-progress" aria-hidden="true"><i id="scrollProgress"></i></div>
+
+<div id="preloader" aria-label="Loading Alpha Watches">
+  <div class="preloader-inner">
+    <div class="preloader-mark">
+      <img id="preloaderLogo" class="preloader-logo" src="alpha-preloader-logo.png" alt="ALPHA — Define Your Time">
+    </div>
+    <div class="preloader-loading">
+      <div class="preloader-track"><span id="preloaderProgress" class="preloader-progress"></span></div>
+      <div class="preloader-meta">
+        <span>LOADING</span>
+        <span id="preloaderPercent" class="preloader-percent">00%</span>
+      </div>
+    </div>
+    <p class="preloader-kicker">DEFINE YOUR TIME</p>
+  </div>
+</div>
+
+<header id="navbar" class="navbar fixed top-0 left-0 right-0 z-50 border-b border-transparent">
+  <nav class="max-w-7xl mx-auto px-6 lg:px-10 py-5 flex items-center justify-between">
+    <a href="index.html"><img src="alpha-logo.png" alt="ALPHA Watches" class="w-[125px] md:w-[155px]"></a>
+    <div class="hidden md:flex items-center gap-9 text-[10px] tracking-wide2 text-ivory/70">
+      <a class="navlink hover:text-gold transition-colors" href="#collection">COLLECTION</a>
+      <a class="navlink hover:text-gold transition-colors" href="#craftsmanship">CRAFTSMANSHIP</a>
+      <a class="navlink hover:text-gold transition-colors" href="builder.html">BUILD YOUR ALPHA</a>
+      <a class="navlink hover:text-gold transition-colors" href="feedback.html">FEEDBACK</a>
+      <a class="navlink hover:text-gold transition-colors" href="enquiries.html">ENQUIRY ACTIVITY</a>
+      <a class="navlink hover:text-gold transition-colors" href="#appointment">BOOK AN ENQUIRY</a>
+    </div>
+    <a href="#appointment" class="hidden sm:block text-[9px] tracking-mega text-gold border border-gold/50 px-5 py-2.5 hover:bg-gold hover:text-ink transition-colors">BOOK AN ENQUIRY</a>
+  </nav>
+</header>
+
+<main>
+
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="grid-bg"></div>
+
+  <div class="hero-copy">
+    <div class="top">
+      <p class="mini-label mb-4">AURELIS / 01</p>
+      <p class="text-sm leading-relaxed text-ivory/50 font-light">A study in precision, proportion and presence. Designed for those who define their own time.</p>
+    </div>
+    <div class="bottom">
+      <p class="text-[10px] tracking-mega text-ivory/45 mb-3">AUTOMATIC / 21 JEWELS</p>
+      <div class="rule mb-3"></div>
+      <p class="text-xs text-ivory/45">INDIA — MADE WITH INTENT</p>
+    </div>
+  </div>
+
+  <div class="absolute inset-0 grid place-items-center z-[2] pointer-events-none">
+    <div class="text-center">
+      <div class="hero-title serif gold-grad">ALPHA</div>
+    </div>
+  </div>
+
+  <img id="heroWatch" class="hero-watch z-[3]" src="Alpha Aurelis.png" alt="Alpha Aurelis watch">
+
+  <div class="scroll-cue">SCROLL TO EXPLORE</div>
+</section>
+
+<section class="story bg-ink" id="experience">
+  <div class="story-panel">
+    <div class="story-word serif">PRECISION</div>
+    <div class="max-w-7xl w-full mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-10 items-center">
+      <div class="reveal-left relative z-10">
+        <p class="mini-label mb-6">01 / THE EXPERIENCE</p>
+        <h2 class="serif text-6xl md:text-8xl leading-[.82]">Time,<br><em class="gold">redefined.</em></h2>
+        <p class="mt-8 max-w-md text-sm leading-7 text-ivory/48 font-light">
+          Aurelis brings a classical silhouette into a modern frame. Every surface, reflection and proportion is designed to feel deliberate.
+        </p>
+      </div>
+      <div class="relative min-h-[70vh] flex items-center justify-center">
+        <div class="detail-orbit"></div>
+        <img id="storyWatch" class="detail-watch z-[2]" src="Alpha Aurelis.png" alt="Aurelis detail">
+      </div>
+    </div>
+  </div>
+
+  <div class="story-panel bg-[#0e0e10]" id="craftsmanship">
+    <div class="max-w-7xl w-full mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-16 items-center">
+      <div class="relative order-2 lg:order-1">
+        <img id="detailWatch" class="w-[70vw] max-w-[520px] mx-auto lg:mx-0 opacity-90" src="Alpha Aurelis.png" alt="Aurelis craftsmanship">
+      </div>
+      <div class="reveal-right order-1 lg:order-2">
+        <p class="mini-label mb-6">02 / CRAFTSMANSHIP</p>
+        <h2 class="serif text-5xl md:text-7xl leading-[.9]">Every detail<br><em class="gold">has a reason.</em></h2>
+        <div class="feature-list mt-10 max-w-xl">
+          <div class="feature"><span>Movement</span><span>Automatic / 21 Jewels</span></div>
+          <div class="feature"><span>Dial</span><span>Brushed black texture</span></div>
+          <div class="feature"><span>Calendar</span><span>Day & date display</span></div>
+          <div class="feature"><span>Case</span><span>Rose-gold finish</span></div>
+          <div class="feature"><span>Identity</span><span>ALPHA / Define Your Time</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="collection" class="py-28 md:py-36 bg-[#0B0B0C]">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+      <div class="reveal">
+        <p class="mini-label mb-5">03 / THE COLLECTION</p>
+        <h2 class="serif text-6xl md:text-8xl leading-[.8]">Three ways<br><em class="gold">to define time.</em></h2>
+      </div>
+      <p class="max-w-sm text-sm text-ivory/45 leading-7 reveal">Distinct personalities. One Alpha philosophy. Explore the collection and choose the watch that feels like yours.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-5">
+      <a class="collection-card reveal group" href="builder.html">
+        <div class="card-glow"></div>
+        <div class="h-[480px] flex items-center justify-center p-10 relative z-[1]">
+          <img src="Soverign.png" alt="Alpha Sovereign" class="max-h-full max-w-full object-contain">
+        </div>
+        <div class="p-7 border-t border-white/10 relative z-[2]">
+          <p class="text-[9px] tracking-mega gold mb-2">01 / CLASSIC</p>
+          <h3 class="serif text-4xl">Sovereign</h3>
+          <p class="text-xs text-ivory/40 mt-2">Quiet authority.</p>
+        </div>
+      </a>
+
+      <a class="collection-card reveal d2 group" href="builder.html">
+        <div class="card-glow"></div>
+        <div class="h-[480px] flex items-center justify-center p-10 relative z-[1]">
+          <img src="Alpha Aurelis.png" alt="Alpha Aurelis" class="max-h-full max-w-full object-contain">
+        </div>
+        <div class="p-7 border-t border-white/10 relative z-[2]">
+          <p class="text-[9px] tracking-mega gold mb-2">02 / SIGNATURE</p>
+          <h3 class="serif text-4xl">Aurelis</h3>
+          <p class="text-xs text-ivory/40 mt-2">A warmer expression of precision.</p>
+        </div>
+      </a>
+
+      <a class="collection-card reveal d3 group" href="builder.html">
+        <div class="card-glow"></div>
+        <div class="h-[480px] flex items-center justify-center p-10 relative z-[1]">
+          <img src="Alpha Azure.png" alt="Alpha Azure" class="max-h-full max-w-full object-contain">
+        </div>
+        <div class="p-7 border-t border-white/10 relative z-[2]">
+          <p class="text-[9px] tracking-mega gold mb-2">03 / MODERN</p>
+          <h3 class="serif text-4xl">Azure</h3>
+          <p class="text-xs text-ivory/40 mt-2">A sharper point of view.</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="py-20 bg-[#111214]">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="video-wrap reveal">
+      <video autoplay muted loop playsinline poster="Alpha Aurelis.png">
+        <source src="Luxury Watches Commercia Without Watermark.mp4" type="video/mp4">
+      </video>
+      <div class="video-overlay"></div>
+      <div class="absolute inset-0 z-[2] flex items-center">
+        <div class="px-8 md:px-16 max-w-2xl">
+          <p class="mini-label mb-5">THE ALPHA MINDSET</p>
+          <h2 class="serif text-6xl md:text-8xl leading-[.8]">Wear the<br><em class="gold">moment.</em></h2>
+          <p class="mt-7 text-sm leading-7 text-ivory/55 max-w-md">A watch is not there to tell you what to do with your time. It is there to remind you that it is yours.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="appointment" class="cta">
+  <div class="relative z-10 w-full max-w-2xl px-6 text-center">
+    <p class="mini-label mb-7">04 / BOOK AN ENQUIRY</p>
+    <h2 class="serif text-7xl md:text-[9.5rem] leading-[.72]">Define<br><em class="gold">Your Time.</em></h2>
+    <p class="max-w-md mx-auto mt-9 text-sm text-ivory/45 leading-7">Tell us what you are looking for and the Alpha team will get back to you.</p>
+
+    <form id="apptForm" class="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto text-left" method="POST" action="https://formsubmit.co/alphawatches.in@gmail.com" target="alphaEnquiryFrame">
+      <input type="text" id="apptName" name="name" required maxlength="100" placeholder="Full name" aria-label="Full name" class="w-full bg-transparent border border-white/15 focus:border-gold outline-none px-5 py-4 text-sm font-light placeholder:text-ivory/30 transition-colors">
+      <input type="email" id="apptEmail" name="email" required maxlength="160" placeholder="Email address" aria-label="Email address" class="w-full bg-transparent border border-white/15 focus:border-gold outline-none px-5 py-4 text-sm font-light placeholder:text-ivory/30 transition-colors">
+      <div class="sm:col-span-2 relative">
+        <textarea id="apptMessage" name="message" required maxlength="500" rows="6" placeholder="How can we assist you?" aria-label="Enquiry message" class="w-full bg-transparent border border-white/15 focus:border-gold outline-none px-5 py-4 pb-9 text-sm font-light leading-7 placeholder:text-ivory/30 transition-colors resize-none"></textarea>
+        <span id="messageCounter" class="absolute bottom-3 right-4 text-[9px] tracking-widest text-ivory/25">0 / 500</span>
+      </div>
+      <input type="text" name="_honey" tabindex="-1" autocomplete="off" style="display:none">
+      <input type="hidden" name="_subject" value="New Alpha Watches Enquiry">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_replyto" id="apptReplyTo" value="">
+      <input type="hidden" name="_url" id="apptUrl" value="">
+      <input type="hidden" name="submission_id" id="submissionId" value="">
+      <input type="hidden" name="submitted_at" id="submittedAt" value="">
+      <input type="hidden" name="form_source" value="Alpha Watches Enquiry">
+      <input type="hidden" name="_captcha" value="true">
+      <button type="submit" id="reserveButton" class="magnetic sm:col-span-2 justify-self-center border border-gold text-gold px-10 py-4 text-[10px] tracking-mega hover:bg-gold hover:text-ink transition-colors disabled:opacity-50 disabled:cursor-not-allowed"><span>BOOK AN ENQUIRY</span></button>
+    </form>
+
+    <iframe name="alphaEnquiryFrame" id="alphaEnquiryFrame" title="Enquiry submission" style="display:none" aria-hidden="true"></iframe>
+
+    <form id="sheetEnquiryForm" method="POST" action="https://script.google.com/macros/s/AKfycbxcA4Lwy4gcjHEw5V0G2InwE8c9NpvETIj6j9A4k-iiKPi1t75ZtGQ1xq9h31_rLFj9aw/exec" target="sheetEnquiryFrame" style="display:none">
+      <input type="hidden" name="name" id="sheetName">
+      <input type="hidden" name="email" id="sheetEmail">
+      <input type="hidden" name="message" id="sheetMessage">
+      <input type="hidden" name="form_source" value="Alpha Watches Enquiry">
+      <input type="hidden" name="enquiry_id" id="sheetEnquiryId">
+    </form>
+    <iframe name="sheetEnquiryFrame" id="sheetEnquiryFrame" title="Google Sheets submission" style="display:none" aria-hidden="true"></iframe>
+
+    <p id="apptMsg" class="hidden mt-7 text-gold text-sm font-light tracking-wide">Thank you — your enquiry has been received. We will contact you soon.</p>
+    <p id="apptError" class="hidden mt-5 text-red-300 text-xs font-light tracking-wide">We could not send your enquiry. Please try again or email alphawatches.in@gmail.com directly.</p>
+
+    <div class="mt-8 flex flex-wrap justify-center gap-4">
+      <a class="magnetic border border-white/15 text-ivory/60 px-7 py-3 text-[10px] tracking-mega hover:border-gold hover:text-gold transition-colors" href="builder.html">BUILD YOUR ALPHA</a>
+      <a class="magnetic border border-white/15 text-ivory/60 px-7 py-3 text-[10px] tracking-mega hover:border-gold hover:text-gold transition-colors" href="feedback.html">FEEDBACK</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer border-t border-gold/15 bg-[#0D0D0F] pt-16 pb-10 relative overflow-hidden">
+  <div class="footer-glow"></div>
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
+    <div class="grid md:grid-cols-4 gap-12 mb-14">
+      <div class="md:col-span-2 footer-reveal">
+        <div class="flex items-center mb-6">
+          <img src="alpha-logo.png" alt="ALPHA Watches" class="w-[125px] md:w-[155px] opacity-85">
+        </div>
+        <p class="text-[13px] font-light text-ivory/45 leading-relaxed max-w-sm">
+          Haute horlogerie for those who define their own time. Designed, assembled and regulated with intent.
+        </p>
+        <a href="mailto:alphawatches.in@gmail.com" class="inline-block mt-5 text-[12px] font-light tracking-wide text-ivory/65 hover:text-gold transition-colors">alphawatches.in@gmail.com</a>
+        <div class="flex gap-3 mt-8" aria-label="Alpha social media">
+          <a href="https://www.instagram.com/alpha_watches.in?igsi=MXZ3eXdibXRkZGJscQ==" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="social-link">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="https://www.youtube.com/@AlphaWatchesOfficial" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="social-link">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="5.5" width="20" height="13" rx="3.5"/><path d="M10 9.5l5 2.5-5 2.5v-5z" fill="currentColor" stroke="none"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-reveal">
+        <p class="text-[10px] tracking-mega text-gold mb-6">COLLECTION</p>
+        <ul class="space-y-3 text-[13px] font-light text-ivory/55">
+          <li><a href="#collection" class="hover:text-gold transition-colors">Sovereign</a></li>
+          <li><a href="#collection" class="hover:text-gold transition-colors">Aurelis</a></li>
+          <li><a href="#collection" class="hover:text-gold transition-colors">Azure</a></li>
+        </ul>
+      </div>
+      <div class="footer-reveal">
+        <p class="text-[10px] tracking-mega text-gold mb-6">MAISON</p>
+        <ul class="space-y-3 text-[13px] font-light text-ivory/55">
+          <li><a href="#experience" class="hover:text-gold transition-colors">The Experience</a></li>
+          <li><a href="#craftsmanship" class="hover:text-gold transition-colors">Craftsmanship</a></li>
+          <li><a href="builder.html" class="hover:text-gold transition-colors">Build Your Alpha</a></li>
+          <li><a href="feedback.html" class="hover:text-gold transition-colors">Feedback</a></li>
+          <li><a href="enquiries.html" class="hover:text-gold transition-colors">Enquiry Activity</a></li>
+          <li><a href="#appointment" class="hover:text-gold transition-colors">Book an Enquiry</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="gold-line mb-8"></div>
+    <div class="flex flex-col md:flex-row gap-5 items-center justify-between">
+      <p class="text-[9px] tracking-wide2 text-ivory/25">© 2026 ALPHA WATCHES</p>
+      <div class="text-[9px] tracking-wide2 text-ivory/25">DEFINE YOUR TIME</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function initAnimations(){
+  const navbar = document.getElementById('navbar');
+  const heroWatch = document.getElementById('heroWatch');
+  const storyWatch = document.getElementById('storyWatch');
+  const detailWatch = document.getElementById('detailWatch');
+
+  const progress = document.getElementById('scrollProgress');
+  const updateChrome = () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const ratio = max > 0 ? window.scrollY / max : 0;
+    progress.style.width = `${ratio * 100}%`;
+  };
+  window.addEventListener('scroll', updateChrome, {passive:true});
+  updateChrome();
+
+  if(reduceMotion){
+    gsap.set('.reveal,.reveal-left,.reveal-right',{opacity:1,x:0,y:0});
+    return;
+  }
+
+  // Establish the center anchor in GSAP so later y/rotation/scale tweens never
+  // overwrite the CSS translate(-50%,-50%) positioning. The watch stays centered.
+  gsap.set(heroWatch,{xPercent:-50,yPercent:-50,x:0,y:0,rotation:0,scale:1});
+
+  // Cinematic entrance: only animate opacity/filter here.
+  // Position/rotation/scale are owned by the single ScrollTrigger tween below.
+  gsap.fromTo(heroWatch,
+    {opacity:0, filter:'blur(7px) drop-shadow(0 45px 70px rgba(0,0,0,.72))'},
+    {opacity:1, filter:'blur(0px) drop-shadow(0 45px 70px rgba(0,0,0,.72))', duration:1.35, delay:.15, ease:'power4.out'}
+  );
+  gsap.fromTo('.hero-title',
+    {y:35, opacity:0, letterSpacing:'.12em'},
+    {y:0, opacity:1, letterSpacing:'-.055em', duration:1.25, delay:.3, ease:'power4.out'}
+  );
+  gsap.fromTo('.hero-copy .top, .hero-copy .bottom, .scroll-cue',
+    {opacity:0}, {opacity:1, duration:1.2, delay:.65, stagger:.1, ease:'power2.out'}
+  );
+
+  // Hero: keep one scroll-controlled transform on the watch.
+  // The previous extra infinite Y tween fought with ScrollTrigger and made the hero feel disturbed.
+  gsap.to(heroWatch,{
+    y:-42, rotation:2.5, scale:1.03, ease:'none',
+    scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:1.35}
+  });
+
+  gsap.to('.hero-title',{
+    y:-100, opacity:.18, ease:'none',
+    scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:1}
+  });
+
+  gsap.to('.hero-copy .top',{
+    x:-60, opacity:0, ease:'none',
+    scrollTrigger:{trigger:'.hero',start:'top top',end:'65% top',scrub:1}
+  });
+
+  gsap.to('.hero-copy .bottom',{
+    x:60, opacity:0, ease:'none',
+    scrollTrigger:{trigger:'.hero',start:'top top',end:'65% top',scrub:1}
+  });
+
+  gsap.to('.grid-bg',{
+    y:180, ease:'none',
+    scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:1}
+  });
+
+
+  // Story watch rotates/tilts as the section is traversed.
+  gsap.fromTo(storyWatch,{rotation:-7,scale:.88},{
+    rotation:8,scale:1.02,ease:'none',
+    scrollTrigger:{trigger:storyWatch,start:'top 85%',end:'bottom 15%',scrub:1.2}
+  });
+
+  gsap.fromTo(detailWatch,{x:-30,rotation:-4,scale:.9},{
+    x:35,rotation:5,scale:1.03,ease:'none',
+    scrollTrigger:{trigger:detailWatch,start:'top 90%',end:'bottom 10%',scrub:1.1}
+  });
+
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach((el)=>{
+    gsap.to(el,{
+      opacity:1,x:0,y:0,duration:1.15,ease:'power3.out',
+      scrollTrigger:{trigger:el,start:'top 84%',once:true}
+    });
+  });
+
+  // Subtle card depth.
+  document.querySelectorAll('.collection-card').forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+      const r=card.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-.5;
+      const y=(e.clientY-r.top)/r.height-.5;
+      gsap.to(card,{rotationY:x*5,rotationX:-y*5,transformPerspective:900,duration:.35});
+    });
+    card.addEventListener('mouseleave',()=>gsap.to(card,{rotationY:0,rotationX:0,duration:.5}));
+  });
+
+  // Magnetic CTA buttons.
+  document.querySelectorAll('.magnetic').forEach(btn=>{
+    btn.addEventListener('mousemove',e=>{
+      const r=btn.getBoundingClientRect();
+      gsap.to(btn,{x:(e.clientX-r.left-r.width/2)*.16,y:(e.clientY-r.top-r.height/2)*.16,duration:.25});
+    });
+    btn.addEventListener('mouseleave',()=>gsap.to(btn,{x:0,y:0,duration:.4}));
+  });
+
+  gsap.utils.toArray('.footer-reveal').forEach((el, i)=>{
+    gsap.to(el,{opacity:1,y:0,duration:1,ease:'power3.out',delay:i*.08,scrollTrigger:{trigger:el,start:'top 90%',once:true}});
+  });
+
+  ScrollTrigger.refresh();
+
+
+
+}
+
+window.addEventListener('load',()=>{
+  const preloader = document.getElementById('preloader');
+  const progress = document.getElementById('preloaderProgress');
+  const percent = document.getElementById('preloaderPercent');
+  const minDuration = 2600;
+  const startedAt = performance.now();
+  const state = {value:0};
+
+  // Calm, luxury-style loading sequence: real page load gates the exit,
+  // while the visible counter and bar make the wait feel intentional.
+  gsap.to(state,{
+    value:100,
+    duration:2.25,
+    ease:'power2.inOut',
+    onUpdate:()=>{
+      const value=Math.round(state.value);
+      progress.style.width=value+'%';
+      percent.textContent=String(value).padStart(2,'0')+'%';
+    },
+    onComplete:()=>{
+      const remaining=Math.max(0,minDuration-(performance.now()-startedAt));
+      setTimeout(()=>{
+        preloader.classList.add('hide');
+        initAnimations();
+      },remaining);
+    }
+  });
+});
+</script>
+
+<script>
+// Book an enquiry — two independent native POSTs:
+// FormSubmit delivers the email, while Google Apps Script stores the enquiry history.
+const apptForm = document.getElementById('apptForm');
+const apptMsg = document.getElementById('apptMsg');
+const apptError = document.getElementById('apptError');
+const enquiryFrame = document.getElementById('alphaEnquiryFrame');
+const sheetEnquiryForm = document.getElementById('sheetEnquiryForm');
+const messageBox = document.getElementById('apptMessage');
+const messageCounter = document.getElementById('messageCounter');
+const reserveButton = document.getElementById('reserveButton');
+const reserveText = reserveButton.querySelector('span');
+const sheetName = document.getElementById('sheetName');
+const sheetEmail = document.getElementById('sheetEmail');
+const sheetMessage = document.getElementById('sheetMessage');
+const sheetEnquiryId = document.getElementById('sheetEnquiryId');
+const submissionId = document.getElementById('submissionId');
+const submittedAt = document.getElementById('submittedAt');
+let enquirySubmitted = false;
+let enquiryTimer = null;
+
+messageBox.addEventListener('input', () => {
+  messageCounter.textContent = `${messageBox.value.length} / 500`;
+});
+
+apptForm.addEventListener('submit', (event) => {
+  if (!apptForm.checkValidity()) return;
+
+  const name = document.getElementById('apptName').value.trim();
+  const email = document.getElementById('apptEmail').value.trim();
+  const message = messageBox.value.trim();
+  const honey = apptForm.querySelector('[name="_honey"]').value;
+
+  if (honey || !name || !email || !message) {
+    event.preventDefault();
+    apptError.classList.remove('hidden');
+    return;
+  }
+
+  const now = new Date();
+  const stamp = now.toISOString().replace(/[-:TZ.]/g, '').slice(0, 14);
+  const random = Math.random().toString(36).slice(2, 7).toUpperCase();
+  const id = `ALP-${stamp}-${random}`;
+
+  document.getElementById('apptReplyTo').value = email;
+  document.getElementById('apptUrl').value = window.location.href;
+  submissionId.value = id;
+  submittedAt.value = now.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+
+  sheetName.value = name;
+  sheetEmail.value = email;
+  sheetMessage.value = message;
+  sheetEnquiryId.value = id;
+  sheetEnquiryForm.submit();
+
+  enquirySubmitted = true;
+  apptMsg.classList.add('hidden');
+  apptError.classList.add('hidden');
+  reserveButton.disabled = true;
+  reserveButton.setAttribute('aria-busy', 'true');
+  reserveText.textContent = 'SENDING...';
+
+  clearTimeout(enquiryTimer);
+  enquiryTimer = setTimeout(() => {
+    if (!enquirySubmitted) return;
+    enquirySubmitted = false;
+    reserveButton.disabled = false;
+    reserveButton.setAttribute('aria-busy', 'false');
+    reserveText.textContent = 'BOOK AN ENQUIRY';
+    apptError.classList.remove('hidden');
+  }, 15000);
+});
+
+enquiryFrame.addEventListener('load', () => {
+  if (!enquirySubmitted) return;
+  clearTimeout(enquiryTimer);
+  enquirySubmitted = false;
+  reserveButton.disabled = false;
+  reserveButton.setAttribute('aria-busy', 'false');
+  reserveText.textContent = 'ENQUIRY SENT ✓';
+  apptMsg.classList.remove('hidden');
+  apptForm.reset();
+  messageCounter.textContent = '0 / 500';
+  setTimeout(() => { reserveText.textContent = 'BOOK AN ENQUIRY'; }, 3500);
+});
+</script>
+</body>
+</html>

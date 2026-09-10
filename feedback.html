@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Alpha Watches — Share your feedback and help shape the next chapter.">
+<title>Feedback | ALPHA — Define Your Time</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        ink: '#0B0B0C',
+        coal: '#141416',
+        ivory: '#F4EFE4',
+        bone: '#E9E2D2',
+        gold: '#C6A15B',
+        golddim: '#9A7B3F'
+      },
+      fontFamily: {
+        serif: ['"Cormorant Garamond"', 'serif'],
+        sans: ['Jost', 'sans-serif']
+      }
+    }
+  }
+}
+</script>
+
+<style>
+html { scroll-padding-top: 90px; }
+body { background:#0B0B0C; }
+::selection { background:#C6A15B; color:#0B0B0C; }
+::-webkit-scrollbar { width:10px; }
+::-webkit-scrollbar-track { background:#0B0B0C; }
+::-webkit-scrollbar-thumb { background:#2a2a2e; border-radius:5px; }
+::-webkit-scrollbar-thumb:hover { background:#C6A15B; }
+
+.tracking-mega { letter-spacing:.45em; }
+.tracking-wide2 { letter-spacing:.25em; }
+
+.nav-link { position:relative; }
+.nav-link::after {
+  content:'';
+  position:absolute;
+  left:0;
+  bottom:-6px;
+  width:100%;
+  height:1px;
+  background:#C6A15B;
+  transform:scaleX(0);
+  transform-origin:right;
+  transition:transform .45s cubic-bezier(.22,1,.36,1);
+}
+.nav-link:hover::after { transform:scaleX(1); transform-origin:left; }
+
+.glass {
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.10);
+  backdrop-filter:blur(16px);
+}
+
+.field {
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(244,239,228,.20);
+  transition:border-color .35s ease, background .35s ease, box-shadow .35s ease;
+}
+.field:focus {
+  border-color:#C6A15B;
+  background:rgba(198,161,91,.035);
+  box-shadow:0 0 0 1px rgba(198,161,91,.14);
+  outline:none;
+}
+
+.rating-btn {
+  width:52px;
+  height:52px;
+  border:1px solid rgba(244,239,228,.18);
+  color:rgba(244,239,228,.50);
+  transition:all .3s ease;
+}
+.rating-btn:hover,
+.rating-btn.active {
+  border-color:#C6A15B;
+  color:#0B0B0C;
+  background:#C6A15B;
+  transform:translateY(-2px);
+}
+
+.choice {
+  border:1px solid rgba(244,239,228,.14);
+  background:rgba(255,255,255,.025);
+  transition:all .3s ease;
+}
+.choice:hover,
+.choice.active {
+  border-color:#C6A15B;
+  background:rgba(198,161,91,.09);
+  color:#F4EFE4;
+}
+
+.submit-btn {
+  position:relative;
+  overflow:hidden;
+}
+.submit-btn::after {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:#C6A15B;
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .5s cubic-bezier(.22,1,.36,1);
+}
+.submit-btn:hover::after { transform:scaleX(1); }
+.submit-btn span {
+  position:relative;
+  z-index:1;
+  transition:color .4s ease;
+}
+.submit-btn:hover span { color:#0B0B0C; }
+
+.gold-line {
+  height:1px;
+  background:linear-gradient(90deg,transparent,#C6A15B,transparent);
+}
+
+@media (prefers-reduced-motion:reduce) {
+  * { transition-duration:.01ms !important; animation-duration:.01ms !important; }
+  html { scroll-behavior:auto; }
+}
+</style>
+</head>
+
+<body class="bg-ink text-ivory font-sans antialiased overflow-x-hidden">
+
+<header class="fixed top-0 left-0 right-0 z-50 border-b border-gold/10 bg-ink/85 backdrop-blur-xl">
+  <nav class="max-w-7xl mx-auto flex items-center justify-between px-6 lg:px-10 py-5">
+    <a href="index.html" class="flex items-center" aria-label="Back to Alpha Watches home">
+      <img src="alpha-logo.png" alt="ALPHA" class="w-[120px] md:w-[155px] h-auto object-contain">
+    </a>
+
+    <div class="hidden md:flex items-center gap-8 text-[11px] tracking-wide2 font-light text-ivory/80">
+      <a href="index.html" class="nav-link hover:text-gold transition-colors">HOME</a>
+      <a href="index.html#collection" class="nav-link hover:text-gold transition-colors">COLLECTION</a>
+      <a href="builder.html" class="nav-link hover:text-gold transition-colors">BUILD YOUR ALPHA</a>
+      <a href="feedback.html" class="nav-link text-gold" aria-current="page">FEEDBACK</a>
+      <a href="index.html#appointment" class="border border-gold/70 text-gold px-6 py-2.5 hover:bg-gold hover:text-ink transition-colors">BOOK A VIEWING</a>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <a href="builder.html" class="text-[9px] tracking-mega text-gold border border-gold/40 px-4 py-2 hover:bg-gold hover:text-ink transition-colors">BUILD YOUR ALPHA</a>
+      <a href="index.html" class="text-[9px] tracking-mega text-gold border border-gold/40 px-4 py-2 hover:bg-gold hover:text-ink transition-colors">
+        BACK TO ALPHA
+      </a>
+    </div>
+  </nav>
+</header>
+
+<main class="pt-28">
+
+<section class="max-w-5xl mx-auto px-6 lg:px-10 pt-16 md:pt-24 pb-12 md:pb-16 text-center">
+  <p class="text-[10px] tracking-mega text-gold mb-6">THE ALPHA JOURNEY</p>
+  <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl leading-[.95]">
+    Tell us what you <span class="italic text-gold">think.</span>
+  </h1>
+  <p class="max-w-2xl mx-auto mt-7 text-sm md:text-base leading-relaxed text-ivory/55 font-light">
+    Your perspective helps shape the next chapter of Alpha Watches. Share your experience,
+    your expectations, or the smallest detail that stayed with you.
+  </p>
+  <div class="gold-line mt-12"></div>
+</section>
+
+<section class="max-w-6xl mx-auto px-6 lg:px-10 pb-24 md:pb-32">
+  <div class="grid lg:grid-cols-[.82fr_1.18fr] gap-8 lg:gap-12 items-start">
+
+    <aside class="glass p-7 md:p-9 lg:sticky lg:top-28">
+      <p class="text-[9px] tracking-mega text-gold">ALPHA FEEDBACK</p>
+      <h2 class="font-serif text-4xl md:text-5xl mt-4 leading-tight">
+        Every opinion<br><span class="italic text-gold">matters.</span>
+      </h2>
+
+      <p class="text-sm text-ivory/50 font-light leading-relaxed mt-6">
+        Whether you explored the collection, tried the configurator, or discovered Alpha
+        through our campaign, we'd like to hear from you.
+      </p>
+
+      <div class="mt-10 pt-7 border-t border-ivory/10">
+        <p class="text-[9px] tracking-mega text-ivory/35 mb-4">YOUR OVERALL EXPERIENCE</p>
+
+        <div id="ratingGroup" class="flex gap-2 flex-wrap" role="radiogroup" aria-label="Overall experience rating">
+          <button type="button" class="rating-btn" data-rating="1" role="radio" aria-checked="false" aria-label="1 out of 5">1</button>
+          <button type="button" class="rating-btn" data-rating="2" role="radio" aria-checked="false" aria-label="2 out of 5">2</button>
+          <button type="button" class="rating-btn" data-rating="3" role="radio" aria-checked="false" aria-label="3 out of 5">3</button>
+          <button type="button" class="rating-btn" data-rating="4" role="radio" aria-checked="false" aria-label="4 out of 5">4</button>
+          <button type="button" class="rating-btn" data-rating="5" role="radio" aria-checked="false" aria-label="5 out of 5">5</button>
+        </div>
+
+        <p id="ratingLabel" class="mt-4 text-[10px] tracking-wide2 text-ivory/35">Select a rating from 1 to 5.</p>
+      </div>
+
+      <div class="mt-8 text-[9px] tracking-wide2 text-ivory/30 leading-relaxed">
+        FEEDBACK IS FOR PROJECT AND BRAND IMPROVEMENT PURPOSES.
+      </div>
+    </aside>
+
+    <div class="glass p-7 md:p-9">
+      <form id="feedbackForm" novalidate>
+
+        <input type="hidden" name="_subject" value="New Alpha Watches Website Feedback">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="true">
+        <input type="hidden" name="_replyto" id="feedbackReplyTo" value="">
+        <input type="hidden" name="_url" id="feedbackUrl" value="">
+        <input type="hidden" name="rating" id="feedbackRating" value="">
+        <input type="hidden" name="feedback_id" id="feedbackId" value="">
+        <input type="hidden" name="submitted_at" id="submittedAt" value="">
+        <input type="hidden" name="source" value="Alpha Watches Feedback Page">
+        <input type="hidden" name="submission_type" value="feedback">
+
+        <input type="text" name="_honey" tabindex="-1" autocomplete="off" style="display:none">
+
+        <div class="grid sm:grid-cols-2 gap-5">
+          <div>
+            <label for="feedbackName" class="block text-[9px] tracking-mega text-ivory/45 mb-3">NAME</label>
+            <input id="feedbackName" name="name" type="text" required maxlength="100"
+                   class="field w-full px-5 py-4 text-sm font-light text-ivory placeholder:text-ivory/25"
+                   placeholder="Your name">
+          </div>
+
+          <div>
+            <label for="feedbackEmail" class="block text-[9px] tracking-mega text-ivory/45 mb-3">EMAIL</label>
+            <input id="feedbackEmail" name="email" type="email" required maxlength="160"
+                   class="field w-full px-5 py-4 text-sm font-light text-ivory placeholder:text-ivory/25"
+                   placeholder="you@example.com">
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <label class="block text-[9px] tracking-mega text-ivory/45 mb-3">WHAT DID YOU EXPLORE?</label>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <button type="button" class="choice p-4 text-left text-[10px] tracking-wide2 text-ivory/55" data-watch="Sovereign">SOVEREIGN</button>
+            <button type="button" class="choice p-4 text-left text-[10px] tracking-wide2 text-ivory/55" data-watch="Aurelis">AURELIS</button>
+            <button type="button" class="choice p-4 text-left text-[10px] tracking-wide2 text-ivory/55" data-watch="Azure">AZURE</button>
+            <button type="button" class="choice p-4 text-left text-[10px] tracking-wide2 text-ivory/55" data-watch="Website">WEBSITE</button>
+          </div>
+
+          <input type="hidden" id="feedbackWatch" name="watch_explored" value="">
+        </div>
+
+        <div class="mt-6">
+          <label for="recommendation" class="block text-[9px] tracking-mega text-ivory/45 mb-3">WOULD YOU RECOMMEND ALPHA?</label>
+          <select id="recommendation" name="recommendation"
+                  class="field w-full px-5 py-4 text-sm font-light text-ivory bg-ink/70">
+            <option value="" class="bg-ink">Select an option</option>
+            <option value="Definitely" class="bg-ink">Definitely</option>
+            <option value="Probably" class="bg-ink">Probably</option>
+            <option value="Not sure" class="bg-ink">Not sure</option>
+            <option value="Probably not" class="bg-ink">Probably not</option>
+          </select>
+        </div>
+
+        <div class="mt-6">
+          <label for="feedbackMessage" class="block text-[9px] tracking-mega text-ivory/45 mb-3">YOUR FEEDBACK</label>
+          <div class="relative">
+            <textarea id="feedbackMessage" name="message" required maxlength="1000" rows="8"
+                      class="field w-full px-5 py-5 pb-10 text-sm font-light leading-relaxed text-ivory placeholder:text-ivory/25 resize-none"
+                      placeholder="What did you like? What could be improved?"></textarea>
+            <span id="messageCounter" class="absolute right-4 bottom-3 text-[9px] tracking-widest text-ivory/25">0 / 1000</span>
+          </div>
+        </div>
+
+        <button id="feedbackSubmit" type="submit"
+                class="submit-btn mt-8 w-full border border-gold text-gold text-[10px] tracking-mega py-4 disabled:opacity-60 disabled:cursor-not-allowed">
+          <span>SUBMIT FEEDBACK</span>
+        </button>
+      </form>
+
+      <!-- Email submission: FormSubmit -->
+      <form id="emailFeedbackForm"
+            method="POST"
+            action="https://formsubmit.co/alphawatches.in@gmail.com"
+            target="feedbackFrame"
+            style="display:none"
+            aria-hidden="true">
+        <input type="hidden" name="_subject" value="New Alpha Watches Website Feedback">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="true">
+        <input type="text" name="_honey" tabindex="-1" autocomplete="off" style="display:none">
+        <input type="hidden" name="_replyto" id="emailFeedbackReplyTo" value="">
+        <input type="hidden" name="_url" id="emailFeedbackUrl" value="">
+        <input type="hidden" name="rating" id="emailFeedbackRating" value="">
+        <input type="hidden" name="feedback_id" id="emailFeedbackId" value="">
+        <input type="hidden" name="submitted_at" id="emailSubmittedAt" value="">
+        <input type="hidden" name="source" value="Alpha Watches Feedback Page">
+        <input type="hidden" name="name" id="emailFeedbackName" value="">
+        <input type="hidden" name="email" id="emailFeedbackEmail" value="">
+        <input type="hidden" name="watch_explored" id="emailFeedbackWatch" value="">
+        <input type="hidden" name="recommendation" id="emailFeedbackRecommendation" value="">
+        <input type="hidden" name="message" id="emailFeedbackMessage" value="">
+      </form>
+      <iframe name="feedbackFrame" id="feedbackFrame" title="Feedback email submission" style="display:none" aria-hidden="true"></iframe>
+
+      <!-- Direct Google Sheets POST for the Feedback sheet -->
+      <form id="sheetFeedbackForm"
+            method="POST"
+            action="https://script.google.com/macros/s/AKfycbxcA4Lwy4gcjHEw5V0G2InwE8c9NpvETIj6j9A4k-iiKPi1t75ZtGQ1xq9h31_rLFj9aw/exec"
+            target="sheetFeedbackFrame"
+            style="display:none"
+            aria-hidden="true">
+        <input type="hidden" name="form_source" value="Alpha Watches Feedback Page">
+        <input type="hidden" name="source" value="Alpha Watches Feedback Page">
+        <input type="hidden" name="submission_type" value="feedback">
+        <input type="hidden" name="feedback_id" id="sheetFeedbackId" value="">
+        <input type="hidden" name="name" id="sheetFeedbackName" value="">
+        <input type="hidden" name="email" id="sheetFeedbackEmail" value="">
+        <input type="hidden" name="rating" id="sheetFeedbackRating" value="">
+        <input type="hidden" name="watch_explored" id="sheetFeedbackWatch" value="">
+        <input type="hidden" name="recommendation" id="sheetFeedbackRecommendation" value="">
+        <input type="hidden" name="message" id="sheetFeedbackMessage" value="">
+      </form>
+      <iframe name="sheetFeedbackFrame" id="sheetFeedbackFrame" title="Google Sheets feedback submission" style="display:none" aria-hidden="true"></iframe>
+
+      <div id="feedbackSuccess" class="hidden mt-8 border border-gold/30 bg-gold/5 px-5 py-5 text-center">
+        <p class="text-gold text-[11px] tracking-wide2">THANK YOU FOR YOUR FEEDBACK</p>
+        <p class="mt-2 text-xs font-light text-ivory/50">
+          Your response has been sent to the Alpha Watches team.
+        </p>
+      </div>
+
+      <div id="feedbackError" class="hidden mt-6 border border-red-300/20 bg-red-300/5 px-5 py-4 text-center">
+        <p id="feedbackErrorText" class="text-red-200 text-xs font-light">
+          Please complete your name, email, rating, and feedback before submitting.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="bg-coal border-t border-gold/15 pt-12 pb-10">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col md:flex-row items-center justify-between gap-5">
+    <a href="index.html" class="flex items-center gap-3">
+      <img src="alpha-logo.png" alt="ALPHA" class="w-[120px] md:w-[155px] h-auto object-contain">
+    </a>
+    <div class="flex flex-wrap items-center justify-center gap-5 text-[9px] tracking-wide2 text-ivory/30">
+      <a href="index.html" class="hover:text-gold transition-colors">HOME</a>
+      <a href="index.html#collection" class="hover:text-gold transition-colors">COLLECTION</a>
+      <a href="builder.html" class="hover:text-gold transition-colors">BUILD YOUR ALPHA</a>
+      <a href="feedback.html" class="text-gold" aria-current="page">FEEDBACK</a>
+      <a href="index.html#appointment" class="hover:text-gold transition-colors">PRIVATE VIEWING</a>
+      <span>© <span id="year"></span> ALPHA WATCHES</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  'use strict';
+
+  const form = document.getElementById('feedbackForm');
+  const submitBtn = document.getElementById('feedbackSubmit');
+
+  const emailForm = document.getElementById('emailFeedbackForm');
+  const emailReplyTo = document.getElementById('emailFeedbackReplyTo');
+  const emailUrl = document.getElementById('emailFeedbackUrl');
+  const emailId = document.getElementById('emailFeedbackId');
+  const emailSubmittedAt = document.getElementById('emailSubmittedAt');
+  const emailName = document.getElementById('emailFeedbackName');
+  const emailEmail = document.getElementById('emailFeedbackEmail');
+  const emailRating = document.getElementById('emailFeedbackRating');
+  const emailWatch = document.getElementById('emailFeedbackWatch');
+  const emailRecommendation = document.getElementById('emailFeedbackRecommendation');
+  const emailMessage = document.getElementById('emailFeedbackMessage');
+
+  const sheetForm = document.getElementById('sheetFeedbackForm');
+  const sheetFrame = document.getElementById('sheetFeedbackFrame');
+  const sheetId = document.getElementById('sheetFeedbackId');
+  const sheetName = document.getElementById('sheetFeedbackName');
+  const sheetEmail = document.getElementById('sheetFeedbackEmail');
+  const sheetRating = document.getElementById('sheetFeedbackRating');
+  const sheetWatch = document.getElementById('sheetFeedbackWatch');
+  const sheetRecommendation = document.getElementById('sheetFeedbackRecommendation');
+  const sheetMessage = document.getElementById('sheetFeedbackMessage');
+
+  const successBox = document.getElementById('feedbackSuccess');
+  const errorBox = document.getElementById('feedbackError');
+  const errorText = document.getElementById('feedbackErrorText');
+
+  const nameInput = document.getElementById('feedbackName');
+  const emailInput = document.getElementById('feedbackEmail');
+  const messageInput = document.getElementById('feedbackMessage');
+
+  const ratingInput = document.getElementById('feedbackRating');
+  const watchInput = document.getElementById('feedbackWatch');
+  const replyToInput = document.getElementById('feedbackReplyTo');
+  const urlInput = document.getElementById('feedbackUrl');
+  const idInput = document.getElementById('feedbackId');
+  const submittedAtInput = document.getElementById('submittedAt');
+
+  const counter = document.getElementById('messageCounter');
+  const ratingLabel = document.getElementById('ratingLabel');
+
+  let submitting = false;
+  let submitted = false;
+  let timeoutId = null;
+
+  const ratingText = {
+    1: 'Needs major improvement.',
+    2: 'Could be better.',
+    3: 'A solid experience.',
+    4: 'Very good experience.',
+    5: 'Excellent experience.'
+  };
+
+  function createFeedbackId() {
+    const now = new Date();
+    const date = [
+      now.getFullYear(),
+      String(now.getMonth() + 1).padStart(2, '0'),
+      String(now.getDate()).padStart(2, '0')
+    ].join('');
+    const time = [
+      String(now.getHours()).padStart(2, '0'),
+      String(now.getMinutes()).padStart(2, '0'),
+      String(now.getSeconds()).padStart(2, '0')
+    ].join('');
+    return 'ALP-FB-' + date + '-' + time;
+  }
+
+  function showError(message) {
+    errorText.textContent = message;
+    errorBox.classList.remove('hidden');
+  }
+
+  document.querySelectorAll('.rating-btn').forEach((button) => {
+    button.addEventListener('click', () => {
+      const value = button.dataset.rating;
+      ratingInput.value = value;
+
+      document.querySelectorAll('.rating-btn').forEach((btn) => {
+        const active = btn.dataset.rating === value;
+        btn.classList.toggle('active', active);
+        btn.setAttribute('aria-checked', active ? 'true' : 'false');
+      });
+
+      ratingLabel.textContent = `${value} / 5 — ${ratingText[value]}`;
+      errorBox.classList.add('hidden');
+    });
+  });
+
+  document.querySelectorAll('[data-watch]').forEach((button) => {
+    button.addEventListener('click', () => {
+      document.querySelectorAll('[data-watch]').forEach((btn) => btn.classList.remove('active'));
+      button.classList.add('active');
+      watchInput.value = button.dataset.watch;
+    });
+  });
+
+  messageInput.addEventListener('input', () => {
+    counter.textContent = `${messageInput.value.length} / 1000`;
+  });
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    if (submitting) return;
+
+    const nameOK = nameInput.value.trim().length > 0;
+    const emailOK = emailInput.validity.valid && emailInput.value.trim().length > 0;
+    const ratingOK = ratingInput.value !== '';
+    const messageOK = messageInput.value.trim().length > 0;
+
+    if (!nameOK || !emailOK || !ratingOK || !messageOK) {
+      showError('Please complete your name, email, rating, and feedback before submitting.');
+      return;
+    }
+
+    submitting = true;
+    submitted = false;
+    successBox.classList.add('hidden');
+    errorBox.classList.add('hidden');
+
+    const feedbackId = createFeedbackId();
+    const submittedAt = new Date().toISOString();
+    const cleanName = nameInput.value.trim();
+    const cleanEmail = emailInput.value.trim();
+    const cleanWatch = watchInput.value;
+    const cleanRecommendation = document.getElementById('recommendation').value;
+    const cleanMessage = messageInput.value.trim();
+
+    replyToInput.value = cleanEmail;
+    urlInput.value = window.location.href;
+    idInput.value = feedbackId;
+    submittedAtInput.value = submittedAt;
+
+    // Populate the dedicated FormSubmit email form.
+    emailReplyTo.value = cleanEmail;
+    emailUrl.value = window.location.href;
+    emailId.value = feedbackId;
+    emailSubmittedAt.value = submittedAt;
+    emailName.value = cleanName;
+    emailEmail.value = cleanEmail;
+    emailRating.value = ratingInput.value;
+    emailWatch.value = cleanWatch;
+    emailRecommendation.value = cleanRecommendation;
+    emailMessage.value = cleanMessage;
+
+    // Populate the direct Google Sheets form.
+    sheetId.value = feedbackId;
+    sheetName.value = cleanName;
+    sheetEmail.value = cleanEmail;
+    sheetRating.value = ratingInput.value;
+    sheetWatch.value = cleanWatch;
+    sheetRecommendation.value = cleanRecommendation;
+    sheetMessage.value = cleanMessage;
+
+    submitBtn.disabled = true;
+    submitBtn.querySelector('span').textContent = 'SENDING...';
+
+    // Two independent POSTs:
+    // 1) Google Apps Script -> Feedback sheet
+    // 2) FormSubmit -> team email
+    // The sheet request is submitted first and is the success signal.
+    sheetForm.submit();
+
+    // Give the Sheets POST a moment to start before the independent email POST.
+    setTimeout(() => {
+      emailForm.submit();
+    }, 250);
+
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      if (!submitted) {
+        submitting = false;
+        submitBtn.disabled = false;
+        submitBtn.querySelector('span').textContent = 'SUBMIT FEEDBACK';
+        showError('The submission is taking longer than expected. Please try again.');
+      }
+    }, 15000);
+  });
+
+  // The Google Sheets request is the source of truth for success.
+  // Do NOT use the FormSubmit iframe for success because email delivery
+  // and Google Sheets storage are two separate operations.
+  sheetFrame.addEventListener('load', () => {
+    if (!submitting || submitted) return;
+
+    submitted = true;
+    clearTimeout(timeoutId);
+
+    submitBtn.querySelector('span').textContent = 'FEEDBACK SENT ✓';
+    successBox.classList.remove('hidden');
+  });
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+})();
+</script>
+
+</body>
+</html>
