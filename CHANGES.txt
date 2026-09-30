@@ -1,0 +1,33 @@
+ALPHA WATCHES - what was changed in this version
+=================================================
+
+LOOK & CONTENT
+- New palette: champagne gold #D4AF6E on midnight ink #0A0C10 (suits the ice-blue Celestia).
+- New "ABOUT ALPHA" section (paragraph + 3 pillars) on the home page.
+- Hero "SCROLL" cue; consistent menu labels on every page (BOOK AN ENQUIRY, ENQUIRY ACTIVITY).
+- Alpha Azure is now smaller on the home page (craftsmanship panel and collection card).
+
+ANIMATION & SOUND
+- Lenis smooth scrolling (desktop only, synced with GSAP ScrollTrigger) on home, Celestia, feedback, enquiries.
+- New ring-style preloader (fixed dimensions, real progress, 9 s fail-safe).
+- Celestia: film sits below the navbar, opens after ~35% of frames are loaded, scroll cue,
+  reveal animation on the end section.
+- fx.js: optional watch-tick sounds (soft tap on click, gentle note on Celestia chapters and page load; no hover sounds).
+  OFF by default; speaker button in the navbar turns it on.
+
+PERFORMANCE (phones)
+- Watch photos: 2 MB PNG -> 90-200 KB WebP. Logos resized to their display size.
+- Commercial video 3.7 MB -> 1.4 MB (audio track removed; it was muted anyway).
+- Celestia on phones uses 960px frames (121 frames, 2.7 MB) instead of 240 frames at 1280px.
+- 3D page asks before downloading the 20 MB Aurelis model on phones / data-saver mode.
+- No blur animation on touch devices.
+
+FIXES
+- Missing -webkit-backdrop-filter added (blur on iPhone / Safari).
+- Home page no longer stays blank or stuck if the GSAP CDN fails to load.
+- Preloader no longer depends on GSAP and always finishes.
+- Feedback page: "BOOK A VIEWING" / "PRIVATE VIEWING" wording fixed; missing Enquiry Activity link added.
+- Enquiry and feedback forms are unchanged: same fields, same FormSubmit + Google Sheets logic.
+
+NOTE: open the site through a web server (VS Code Live Server or `python -m http.server`)
+so the 3D model and Celestia frames load.

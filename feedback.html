@@ -4,9 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Alpha Watches — Share your feedback and help shape the next chapter.">
+<meta name="theme-color" content="#0A0C10">
 <title>Feedback | ALPHA — Define Your Time</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
 
@@ -15,11 +17,11 @@ tailwind.config = {
   theme: {
     extend: {
       colors: {
-        ink: '#0B0B0C',
+        ink: '#0A0C10',
         coal: '#141416',
         ivory: '#F4EFE4',
         bone: '#E9E2D2',
-        gold: '#C6A15B',
+        gold: '#D4AF6E',
         golddim: '#9A7B3F'
       },
       fontFamily: {
@@ -33,12 +35,12 @@ tailwind.config = {
 
 <style>
 html { scroll-padding-top: 90px; }
-body { background:#0B0B0C; }
-::selection { background:#C6A15B; color:#0B0B0C; }
+body { background:#0A0C10; }
+::selection { background:#D4AF6E; color:#0A0C10; }
 ::-webkit-scrollbar { width:10px; }
-::-webkit-scrollbar-track { background:#0B0B0C; }
+::-webkit-scrollbar-track { background:#0A0C10; }
 ::-webkit-scrollbar-thumb { background:#2a2a2e; border-radius:5px; }
-::-webkit-scrollbar-thumb:hover { background:#C6A15B; }
+::-webkit-scrollbar-thumb:hover { background:#D4AF6E; }
 
 .tracking-mega { letter-spacing:.45em; }
 .tracking-wide2 { letter-spacing:.25em; }
@@ -51,7 +53,7 @@ body { background:#0B0B0C; }
   bottom:-6px;
   width:100%;
   height:1px;
-  background:#C6A15B;
+  background:#D4AF6E;
   transform:scaleX(0);
   transform-origin:right;
   transition:transform .45s cubic-bezier(.22,1,.36,1);
@@ -61,7 +63,7 @@ body { background:#0B0B0C; }
 .glass {
   background:rgba(255,255,255,.035);
   border:1px solid rgba(255,255,255,.10);
-  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
 }
 
 .field {
@@ -70,9 +72,9 @@ body { background:#0B0B0C; }
   transition:border-color .35s ease, background .35s ease, box-shadow .35s ease;
 }
 .field:focus {
-  border-color:#C6A15B;
-  background:rgba(198,161,91,.035);
-  box-shadow:0 0 0 1px rgba(198,161,91,.14);
+  border-color:#D4AF6E;
+  background:rgba(212,175,110,.035);
+  box-shadow:0 0 0 1px rgba(212,175,110,.14);
   outline:none;
 }
 
@@ -85,9 +87,9 @@ body { background:#0B0B0C; }
 }
 .rating-btn:hover,
 .rating-btn.active {
-  border-color:#C6A15B;
-  color:#0B0B0C;
-  background:#C6A15B;
+  border-color:#D4AF6E;
+  color:#0A0C10;
+  background:#D4AF6E;
   transform:translateY(-2px);
 }
 
@@ -98,8 +100,8 @@ body { background:#0B0B0C; }
 }
 .choice:hover,
 .choice.active {
-  border-color:#C6A15B;
-  background:rgba(198,161,91,.09);
+  border-color:#D4AF6E;
+  background:rgba(212,175,110,.09);
   color:#F4EFE4;
 }
 
@@ -111,7 +113,7 @@ body { background:#0B0B0C; }
   content:'';
   position:absolute;
   inset:0;
-  background:#C6A15B;
+  background:#D4AF6E;
   transform:scaleX(0);
   transform-origin:left;
   transition:transform .5s cubic-bezier(.22,1,.36,1);
@@ -122,11 +124,11 @@ body { background:#0B0B0C; }
   z-index:1;
   transition:color .4s ease;
 }
-.submit-btn:hover span { color:#0B0B0C; }
+.submit-btn:hover span { color:#0A0C10; }
 
 .gold-line {
   height:1px;
-  background:linear-gradient(90deg,transparent,#C6A15B,transparent);
+  background:linear-gradient(90deg,transparent,#D4AF6E,transparent);
 }
 
 @media (prefers-reduced-motion:reduce) {
@@ -134,6 +136,8 @@ body { background:#0B0B0C; }
   html { scroll-behavior:auto; }
 }
 </style>
+<link rel="icon" type="image/png" href="alpha-favicon.png">
+<link rel="stylesheet" href="shared.css">
 </head>
 
 <body class="bg-ink text-ivory font-sans antialiased overflow-x-hidden">
@@ -144,22 +148,32 @@ body { background:#0B0B0C; }
       <img src="alpha-logo.png" alt="ALPHA" class="w-[120px] md:w-[155px] h-auto object-contain">
     </a>
 
-    <div class="hidden md:flex items-center gap-8 text-[11px] tracking-wide2 font-light text-ivory/80">
+    <div class="hidden lg:flex items-center gap-8 text-[11px] tracking-wide2 font-light text-ivory/80">
       <a href="index.html" class="nav-link hover:text-gold transition-colors">HOME</a>
       <a href="index.html#collection" class="nav-link hover:text-gold transition-colors">COLLECTION</a>
-      <a href="builder.html" class="nav-link hover:text-gold transition-colors">BUILD YOUR ALPHA</a>
+      <a href="models.html" class="nav-link hover:text-gold transition-colors">3D MODELS</a>
+      <a href="celestia.html" class="nav-link hover:text-gold transition-colors">CELESTIA</a>
       <a href="feedback.html" class="nav-link text-gold" aria-current="page">FEEDBACK</a>
-      <a href="index.html#appointment" class="border border-gold/70 text-gold px-6 py-2.5 hover:bg-gold hover:text-ink transition-colors">BOOK A VIEWING</a>
+      <a href="enquiries.html" class="nav-link hover:text-gold transition-colors">ENQUIRY ACTIVITY</a>
+      <a href="index.html#appointment" class="border border-gold/70 text-gold px-6 py-2.5 hover:bg-gold hover:text-ink transition-colors">BOOK AN ENQUIRY</a>
     </div>
 
     <div class="flex items-center gap-3">
-      <a href="builder.html" class="text-[9px] tracking-mega text-gold border border-gold/40 px-4 py-2 hover:bg-gold hover:text-ink transition-colors">BUILD YOUR ALPHA</a>
-      <a href="index.html" class="text-[9px] tracking-mega text-gold border border-gold/40 px-4 py-2 hover:bg-gold hover:text-ink transition-colors">
-        BACK TO ALPHA
-      </a>
+      <a href="index.html" class="hidden sm:block text-[9px] tracking-mega text-gold border border-gold/40 px-4 py-2 hover:bg-gold hover:text-ink transition-colors">BACK TO ALPHA</a>
+      <button id="menuBtn" class="lg:hidden menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span></button>
     </div>
   </nav>
 </header>
+<div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+  <a href="index.html">HOME</a>
+  <a href="index.html#collection">COLLECTION</a>
+  <a href="models.html">3D MODELS</a>
+  <a href="celestia.html">CELESTIA</a>
+  <a href="feedback.html" aria-current="page" class="gold">FEEDBACK</a>
+  <a href="enquiries.html">ENQUIRY ACTIVITY</a>
+  <a href="index.html#appointment" class="gold">BOOK AN ENQUIRY</a>
+</div>
+
 
 <main class="pt-28">
 
@@ -351,9 +365,9 @@ body { background:#0B0B0C; }
     <div class="flex flex-wrap items-center justify-center gap-5 text-[9px] tracking-wide2 text-ivory/30">
       <a href="index.html" class="hover:text-gold transition-colors">HOME</a>
       <a href="index.html#collection" class="hover:text-gold transition-colors">COLLECTION</a>
-      <a href="builder.html" class="hover:text-gold transition-colors">BUILD YOUR ALPHA</a>
+      <a href="models.html" class="hover:text-gold transition-colors">3D MODELS</a>
       <a href="feedback.html" class="text-gold" aria-current="page">FEEDBACK</a>
-      <a href="index.html#appointment" class="hover:text-gold transition-colors">PRIVATE VIEWING</a>
+      <a href="index.html#appointment" class="hover:text-gold transition-colors">BOOK AN ENQUIRY</a>
       <span>© <span id="year"></span> ALPHA WATCHES</span>
     </div>
   </div>
@@ -562,5 +576,7 @@ body { background:#0B0B0C; }
 })();
 </script>
 
+<script src="nav.js"></script>
+<script src="fx.js" defer></script>
 </body>
 </html>

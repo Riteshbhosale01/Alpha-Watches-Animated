@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Explore Alpha watches in 3D — rotate, zoom and inspect every detail.">
+<meta name="theme-color" content="#0A0C10">
+<title>3D Models | ALPHA — Define Your Time</title>
+<link rel="icon" type="image/png" href="alpha-favicon.png">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: { ink:'#0A0C10', coal:'#141416', ivory:'#F4EFE4', gold:'#D4AF6E' },
+    fontFamily: { serif:['"Cormorant Garamond"','serif'], sans:['Jost','sans-serif'] }
+  } }
+}
+</script>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+
+<style>
+:root{--ink:#0A0C10;--gold:#D4AF6E;--ivory:#F4EFE4}
+*{box-sizing:border-box}
+html{background:var(--ink);scroll-padding-top:90px}
+body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-serif;overflow-x:hidden}
+::selection{background:var(--gold);color:var(--ink)}
+.serif{font-family:"Cormorant Garamond",serif}
+.gold{color:var(--gold)}
+.mini-label{font-size:9px;letter-spacing:.42em;color:var(--gold)}
+.rule{height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,110,.8),transparent)}
+.tracking-mega{letter-spacing:.42em}
+.navbar{background:rgba(11,11,12,.82);-webkit-backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border-bottom:1px solid rgba(212,175,110,.14)}
+.navbar{position:fixed;top:0;left:0;right:0;z-index:50}
+.navlink{position:relative}
+.navlink:after{content:"";position:absolute;left:0;right:0;bottom:-7px;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:right;transition:transform .45s cubic-bezier(.22,1,.36,1)}
+.navlink:hover:after,.navlink[aria-current=page]:after{transform:scaleX(1);transform-origin:left}
+
+/* ---------- page backdrop ---------- */
+.page-bg{position:absolute;inset:0;pointer-events:none;background:
+  radial-gradient(circle at 34% 40%,rgba(212,175,110,.12),transparent 34%),
+  radial-gradient(circle at 80% 70%,rgba(255,255,255,.03),transparent 40%),#0A0C10}
+.grid-bg{position:absolute;inset:0;opacity:.12;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px);background-size:80px 80px;-webkit-mask-image:linear-gradient(to bottom,transparent,#000 15%,#000 80%,transparent);mask-image:linear-gradient(to bottom,transparent,#000 15%,#000 80%,transparent)}
+.bg-word{position:absolute;left:-1vw;top:11vh;font-size:clamp(5rem,17vw,16rem);line-height:.75;letter-spacing:-.06em;color:rgba(244,239,228,.04);white-space:nowrap;pointer-events:none;user-select:none}
+
+/* ---------- viewer ---------- */
+.viewer{position:relative;height:clamp(360px,66svh,700px);touch-action:pan-y}
+.viewer-orbit{position:absolute;left:50%;top:50%;width:min(82%,520px);aspect-ratio:1;transform:translate(-50%,-50%);border:1px solid rgba(212,175,110,.2);border-radius:50%;box-shadow:0 0 110px rgba(212,175,110,.07);pointer-events:none}
+.viewer-orbit:before,.viewer-orbit:after{content:"";position:absolute;inset:11%;border:1px solid rgba(244,239,228,.06);border-radius:50%}
+.viewer-orbit:after{inset:25%}
+.viewer-floor{position:absolute;left:50%;bottom:7%;width:min(60%,380px);height:26px;transform:translateX(-50%);background:radial-gradient(ellipse at center,rgba(0,0,0,.65),transparent 70%);filter:blur(6px);pointer-events:none}
+.viewer canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab;opacity:0;transition:opacity .9s ease;outline:none}
+.viewer canvas:active{cursor:grabbing}
+.viewer.ready canvas{opacity:1}
+.corner{position:absolute;width:18px;height:18px;border-color:rgba(212,175,110,.5);pointer-events:none}
+.corner.tl{left:0;top:0;border-left:1px solid;border-top:1px solid}
+.corner.tr{right:0;top:0;border-right:1px solid;border-top:1px solid}
+.corner.bl{left:0;bottom:0;border-left:1px solid;border-bottom:1px solid}
+.corner.br{right:0;bottom:0;border-right:1px solid;border-bottom:1px solid}
+.v-tag{position:absolute;left:18px;top:16px;font-size:9px;letter-spacing:.34em;color:rgba(244,239,228,.45);pointer-events:none}
+.v-tag i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gold);margin-right:10px;box-shadow:0 0 10px rgba(212,175,110,.8);vertical-align:1px}
+.v-tag.soon i{background:#5b5b60;box-shadow:none}
+.v-hint{position:absolute;left:0;right:0;bottom:16px;text-align:center;font-size:9px;letter-spacing:.3em;color:rgba(244,239,228,.32);pointer-events:none;transition:opacity .6s}
+.v-tools{position:absolute;right:14px;bottom:12px;display:flex;gap:8px;z-index:3}
+.tool{width:40px;height:40px;border:1px solid rgba(244,239,228,.16);background:rgba(11,11,12,.55);-webkit-backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:rgba(244,239,228,.7);display:grid;place-items:center;cursor:pointer;transition:color .3s,border-color .3s,background .3s}
+.tool:hover,.tool[aria-pressed=true]{color:var(--gold);border-color:rgba(212,175,110,.6)}
+.tool svg{width:17px;height:17px}
+
+.v-loader{position:absolute;inset:0;display:none;place-items:center;z-index:2;pointer-events:none}
+.v-loader.show{display:grid}
+.v-loader .box{width:min(230px,62%);text-align:center}
+.v-track{height:1px;background:rgba(244,239,228,.12);overflow:hidden}
+.v-bar{display:block;height:100%;width:0;background:linear-gradient(90deg,#8a6b35,#D4AF6E,#eee0bd);transition:width .25s}
+.v-bar.indeterminate{width:40%;animation:slide 1.3s ease-in-out infinite}
+@keyframes slide{0%{transform:translateX(-110%)}100%{transform:translateX(260%)}}
+.v-meta{margin-top:12px;display:flex;justify-content:space-between;font-size:8px;letter-spacing:.38em;color:rgba(244,239,228,.4)}
+
+.v-poster{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;z-index:1;padding:44px 20px 70px}
+.v-poster.show{display:flex}
+.v-poster img{max-height:100%;max-width:min(68%,340px);object-fit:contain;filter:drop-shadow(0 40px 60px rgba(0,0,0,.7));animation:float 7s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-12px) rotate(1deg)}}
+.v-badge{font-size:9px;letter-spacing:.38em;color:var(--gold);border:1px solid rgba(212,175,110,.4);padding:9px 16px;text-align:center}
+.v-error{position:absolute;inset:0;display:none;place-items:center;text-align:center;padding:30px;z-index:3;background:rgba(11,11,12,.85)}
+.v-error.show{display:grid}
+.v-error p{max-width:380px;font-size:12px;line-height:1.9;color:rgba(244,239,228,.6);font-weight:300}
+.v-error code{background:rgba(255,255,255,.08);padding:2px 6px;font-size:11px;color:var(--gold)}
+
+/* ---------- info ---------- */
+.feature-list{border-top:1px solid rgba(244,239,228,.12)}
+.feature{padding:16px 0;border-bottom:1px solid rgba(244,239,228,.12);display:flex;justify-content:space-between;gap:20px;font-size:14px;font-weight:300}
+.feature span:last-child{color:rgba(244,239,228,.5);text-align:right}
+.spec-empty{padding:18px 0;border-bottom:1px dashed rgba(244,239,228,.14);font-size:12px;letter-spacing:.06em;color:rgba(244,239,228,.35);font-weight:300}
+.btn{display:inline-block;border:1px solid var(--gold);color:var(--gold);padding:15px 26px;font-size:10px;letter-spacing:.34em;transition:background .3s,color .3s;text-align:center}
+.btn:hover{background:var(--gold);color:var(--ink)}
+.btn.ghost{border-color:rgba(244,239,228,.2);color:rgba(244,239,228,.65)}
+.btn.ghost:hover{border-color:var(--gold);background:transparent;color:var(--gold)}
+.swap{transition:opacity .35s,transform .35s}
+.swap.out{opacity:0;transform:translateY(10px)}
+
+/* ---------- model rail ---------- */
+.slot{position:relative;background:#111214;border:1px solid rgba(255,255,255,.08);padding:0;cursor:pointer;text-align:left;color:inherit;font:inherit;transition:border-color .4s,transform .5s cubic-bezier(.22,1,.36,1),background .4s;display:flex;flex-direction:column}
+.slot:hover{transform:translateY(-5px);border-color:rgba(212,175,110,.45)}
+.slot[aria-pressed=true]{border-color:var(--gold);background:#15140f}
+.slot .thumb{height:clamp(130px,17vw,190px);display:flex;align-items:center;justify-content:center;padding:14px;position:relative}
+.slot .thumb:before{content:"";position:absolute;width:120px;height:120px;border-radius:50%;background:rgba(212,175,110,.1);filter:blur(40px)}
+.slot .thumb img{position:relative;max-height:100%;max-width:100%;object-fit:contain;filter:drop-shadow(0 18px 24px rgba(0,0,0,.6))}
+.slot .meta{padding:14px 16px 16px;border-top:1px solid rgba(255,255,255,.08)}
+.slot .name{font-family:"Cormorant Garamond",serif;font-size:1.65rem;line-height:1}
+.chip{display:inline-block;margin-top:9px;font-size:8px;letter-spacing:.28em;padding:5px 9px;border:1px solid rgba(255,255,255,.14);color:rgba(244,239,228,.45)}
+.chip.live{color:var(--gold);border-color:rgba(212,175,110,.55)}
+.slot-more{border:1px dashed rgba(244,239,228,.16);display:grid;place-items:center;text-align:center;padding:24px 14px;min-height:150px;font-size:9px;letter-spacing:.3em;color:rgba(244,239,228,.3);line-height:2}
+
+@media(max-width:639px){
+  .viewer{height:clamp(330px,56svh,520px)}
+  .v-hint{bottom:62px}
+  .v-tools{left:0;right:0;justify-content:center;bottom:10px}
+  .feature{font-size:13px}
+}
+@media(max-height:520px) and (orientation:landscape){
+  .viewer{height:max(300px,82svh)}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+
+<body>
+
+<header id="navbar" class="navbar fixed top-0 left-0 right-0 z-50">
+  <nav class="max-w-7xl mx-auto px-6 lg:px-10 py-5 flex items-center justify-between" aria-label="Main">
+    <a href="index.html" aria-label="Alpha Watches home"><img src="alpha-logo.png" alt="ALPHA Watches" width="155" height="52" class="w-[125px] md:w-[155px] h-auto"></a>
+    <div class="hidden lg:flex items-center gap-8 text-[10px] tracking-[.25em] text-ivory/70">
+      <a class="navlink hover:text-gold transition-colors" href="index.html">HOME</a>
+      <a class="navlink hover:text-gold transition-colors" href="index.html#collection">COLLECTION</a>
+      <a class="navlink text-gold" href="models.html" aria-current="page">3D MODELS</a>
+      <a class="navlink hover:text-gold transition-colors" href="celestia.html">CELESTIA</a>
+      <a class="navlink hover:text-gold transition-colors" href="feedback.html">FEEDBACK</a>
+      <a class="navlink hover:text-gold transition-colors" href="enquiries.html">ENQUIRY ACTIVITY</a>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="index.html#appointment" class="hidden sm:block text-[9px] tracking-[.4em] text-gold border border-gold/50 px-5 py-2.5 hover:bg-gold hover:text-ink transition-colors">BOOK AN ENQUIRY</a>
+      <button id="menuBtn" class="lg:hidden menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span></button>
+    </div>
+  </nav>
+</header>
+
+<div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+  <a href="index.html">HOME</a>
+  <a href="index.html#collection">COLLECTION</a>
+  <a href="models.html" aria-current="page">3D MODELS</a>
+  <a href="celestia.html">CELESTIA</a>
+  <a href="feedback.html">FEEDBACK</a>
+  <a href="enquiries.html">ENQUIRY ACTIVITY</a>
+  <a href="index.html#appointment" class="gold">BOOK AN ENQUIRY</a>
+</div>
+
+<main class="relative overflow-hidden">
+  <div class="page-bg"></div>
+  <div class="grid-bg"></div>
+  <div id="bgWord" class="bg-word serif" aria-hidden="true">AURELIS</div>
+
+  <!-- ===================== SHOWCASE ===================== -->
+  <section class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pt-28 md:pt-32 pb-14">
+    <p class="mini-label mb-5">ALPHA / 3D MODELS</p>
+
+    <div class="grid lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] gap-10 lg:gap-16 items-center">
+
+      <!-- viewer -->
+      <div id="viewer" class="viewer" aria-label="Interactive 3D watch viewer">
+        <div class="viewer-orbit"></div>
+        <div class="viewer-floor"></div>
+        <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+
+        <!-- canvas is injected here by the script -->
+
+        <div id="vTag" class="v-tag"><i></i><span id="vTagText">AURELIS / 3D</span></div>
+
+        <div id="vLoader" class="v-loader" role="status" aria-live="polite">
+          <div class="box">
+            <div class="v-track"><span id="vBar" class="v-bar"></span></div>
+            <div class="v-meta"><span>LOADING 3D MODEL</span><span id="vPct">0%</span></div>
+          </div>
+        </div>
+
+        <div id="vPoster" class="v-poster">
+          <img id="vPosterImg" src="Alpha Aurelis.webp" alt="" width="600" height="772">
+          <div id="vBadge" class="v-badge">3D MODEL COMING SOON</div>
+        </div>
+
+        <div id="vError" class="v-error" role="alert">
+          <p id="vErrorText"></p>
+        </div>
+
+        <p id="vHint" class="v-hint">DRAG TO ROTATE &nbsp;·&nbsp; PINCH OR CTRL + SCROLL TO ZOOM</p>
+
+        <div id="vTools" class="v-tools">
+          <button id="btnSpin" class="tool" type="button" aria-pressed="true" aria-label="Toggle auto-rotate" title="Auto-rotate">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v5h-5"/></svg>
+          </button>
+          <button id="btnZoomOut" class="tool" type="button" aria-label="Zoom out" title="Zoom out">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 12h14"/></svg>
+          </button>
+          <button id="btnZoomIn" class="tool" type="button" aria-label="Zoom in" title="Zoom in">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <button id="btnReset" class="tool" type="button" aria-label="Reset view" title="Reset view">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- info -->
+      <div id="info" class="swap">
+        <p id="iTag" class="mini-label mb-5">02 / SIGNATURE</p>
+        <h1 id="iName" class="serif text-6xl md:text-8xl leading-[.85]">Aurelis</h1>
+        <p id="iLine" class="mt-6 max-w-md text-sm leading-7 text-ivory/50 font-light">A warmer expression of precision.</p>
+
+        <div id="iSpecs" class="feature-list mt-9 max-w-xl"></div>
+
+        <div class="mt-9 flex flex-wrap gap-3">
+          <a id="iCta" href="index.html#appointment" class="btn">ENQUIRE ABOUT THIS WATCH</a>
+          <a id="iFilm" href="celestia.html" class="btn ghost" hidden>WATCH THE FILM</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MODEL RAIL ===================== -->
+  <section class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pb-24 md:pb-28" aria-labelledby="railTitle">
+    <div class="rule mb-8"></div>
+    <div class="flex items-end justify-between gap-6 mb-7">
+      <div>
+        <p class="mini-label mb-3">THE COLLECTION IN 3D</p>
+        <h2 id="railTitle" class="serif text-3xl md:text-4xl">Choose a watch</h2>
+      </div>
+      <p id="railCount" class="text-[10px] tracking-[.3em] text-ivory/35 text-right"></p>
+    </div>
+    <div id="rail" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4"></div>
+  </section>
+</main>
+
+<footer class="border-t border-gold/15 bg-[#0D0D0F] py-10 relative z-10">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col md:flex-row items-center justify-between gap-5">
+    <a href="index.html"><img src="alpha-logo.png" alt="ALPHA" width="155" height="52" class="w-[125px] md:w-[155px] h-auto opacity-85"></a>
+    <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-[9px] tracking-[.25em] text-ivory/35">
+      <a href="index.html" class="hover:text-gold transition-colors">HOME</a>
+      <a href="celestia.html" class="hover:text-gold transition-colors">CELESTIA FILM</a>
+      <a href="feedback.html" class="hover:text-gold transition-colors">FEEDBACK</a>
+      <a href="index.html#appointment" class="hover:text-gold transition-colors">BOOK AN ENQUIRY</a>
+      <span>© 2026 ALPHA WATCHES</span>
+    </div>
+  </div>
+</footer>
+
+<script src="nav.js"></script>
+<script src="fx.js" defer></script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+/* =====================================================================
+   MODEL LIST  —  this is the only place you need to edit to add a watch.
+   To switch on a new 3D model:
+     1. put the .glb next to this file
+     2. set  glb: 'YourModel.glb'  on its entry below
+     3. (optional) fix its orientation with  rotation: [x, y, z]  in degrees
+   Entries with glb: null show the product photo + a "coming soon" badge.
+   To add a brand-new slot, copy one entry and give it a unique id.
+   ===================================================================== */
+const MODELS = [
+  { id:'aurelis',   name:'Aurelis',   tag:'02 / SIGNATURE', line:'A warmer expression of precision.',
+    img:'Alpha Aurelis.webp', glb:'Aurelis_Model.glb', rotation:[0,0,0],
+    specs:[['Movement','Automatic / 21 Jewels'],['Dial','Brushed black texture'],['Calendar','Day & date display'],['Case','Rose-gold finish']] },
+
+  { id:'sovereign', name:'Sovereign', tag:'01 / CLASSIC',   line:'Quiet authority.',
+    img:'Soverign.webp', glb:null, specs:[] },
+
+  { id:'azure',     name:'Azure',     tag:'03 / MODERN',    line:'A sharper point of view.',
+    img:'Alpha Azure.webp', glb:null, specs:[] },
+
+  { id:'oyster',    name:'Oyster',    tag:'04 / OYSTER',    line:'',
+    img:'Alpha Oyster.webp', glb:null, specs:[] },
+
+  { id:'celestia',  name:'Celestia',  tag:'C001 / CHRONOGRAPH', line:'The chronograph, taken apart and put back together — told through scroll.',
+    img:'alpha-c001-chronograph-celestia.webp', glb:null, film:'celestia.html', specs:[] }
+];
+
+const $ = (id) => document.getElementById(id);
+const D2R = Math.PI / 180;
+const viewerEl = $('viewer');
+
+/* ---------- renderer / scene ---------- */
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true, powerPreference:'high-performance' });
+} catch (e) { renderer = null; }
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(28, 1, 0.01, 100);
+let controls = null;
+
+if (renderer) {
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+  renderer.domElement.setAttribute('tabindex', '0');
+  renderer.domElement.setAttribute('aria-label', 'Drag to rotate the watch');
+  viewerEl.insertBefore(renderer.domElement, viewerEl.querySelector('.v-tag'));
+
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+  const key = new THREE.DirectionalLight(0xfff1d6, 1.5); key.position.set(2, 3, 4); scene.add(key);
+  const rim = new THREE.DirectionalLight(0xbfd4ff, 0.7); rim.position.set(-3, 1, -3); scene.add(rim);
+
+  // Keep the page scrollable: plain wheel scrolls the page, Ctrl/Cmd + wheel zooms.
+  // (registered BEFORE OrbitControls so it runs first)
+  renderer.domElement.addEventListener('wheel', (e) => {
+    if (!(e.ctrlKey || e.metaKey)) e.stopImmediatePropagation();
+  }, { capture:true, passive:true });
+
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.07;
+  controls.enablePan = false;
+  controls.rotateSpeed = 0.8;
+  controls.zoomSpeed = 0.8;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 1.3;
+  renderer.domElement.style.touchAction = 'pan-y';   // vertical swipe scrolls the page, horizontal drag rotates
+}
+
+/* ---------- state ---------- */
+const loader = new GLTFLoader();
+loader.setMeshoptDecoder(MeshoptDecoder);   // the Aurelis GLB uses EXT_meshopt_compression
+const cache = new Map();
+let current = null;
+let activePivot = null;
+let fitRadius = 1;
+let spinWanted = true;
+let resumeTimer = null;
+let onScreen = true;
+const maxAniso = renderer ? renderer.capabilities.getMaxAnisotropy() : 1;
+
+/* ---------- framing ---------- */
+const DIR = new THREE.Vector3(0.28, 0.14, 1).normalize();
+
+function fitDistance() {
+  const vf = camera.fov * D2R;
+  const hf = 2 * Math.atan(Math.tan(vf / 2) * camera.aspect);
+  return (fitRadius / Math.sin(Math.min(vf, hf) / 2)) * 1.08;
+}
+let lastFit = 0;
+function frameCamera(keepZoom) {
+  if (!controls) return;
+  const d = fitDistance();
+  let ratio = 1;
+  let dir = DIR.clone();
+  if (keepZoom && lastFit) {
+    const offset = camera.position.clone().sub(controls.target);
+    ratio = offset.length() / lastFit;      // remember how far the visitor has zoomed
+    dir = offset.normalize();
+  }
+  lastFit = d;
+  controls.minDistance = d * 0.5;
+  controls.maxDistance = d * 1.7;
+  camera.position.copy(controls.target).add(dir.multiplyScalar(d * ratio));
+  camera.near = d / 100; camera.far = d * 20;
+  camera.updateProjectionMatrix();
+  controls.update();
+}
+function zoomBy(f) {
+  if (!controls) return;
+  const dir = camera.position.clone().sub(controls.target);
+  const dist = THREE.MathUtils.clamp(dir.length() * f, controls.minDistance, controls.maxDistance);
+  camera.position.copy(controls.target).add(dir.setLength(dist));
+}
+
+function resize() {
+  if (!renderer) return;
+  const w = viewerEl.clientWidth, h = viewerEl.clientHeight;
+  if (!w || !h) return;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  if (activePivot) frameCamera(true);
+}
+new ResizeObserver(resize).observe(viewerEl);
+
+/* ---------- loading ---------- */
+function prepare(gltf, m) {
+  const root = gltf.scene;
+  root.traverse((o) => {
+    if (!o.isMesh) return;
+    o.frustumCulled = false;
+    const mats = Array.isArray(o.material) ? o.material : [o.material];
+    mats.forEach((mat) => {
+      mat.envMapIntensity = 1.25;
+      ['map','normalMap','roughnessMap','metalnessMap','aoMap','emissiveMap'].forEach((k) => { if (mat[k]) mat[k].anisotropy = maxAniso; });
+    });
+  });
+  const pivot = new THREE.Group();
+  pivot.add(root);
+  const r = m.rotation || [0, 0, 0];
+  pivot.rotation.set(r[0] * D2R, r[1] * D2R, r[2] * D2R);
+  pivot.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(pivot);
+  pivot.position.sub(box.getCenter(new THREE.Vector3()));   // centre the model on the orbit target
+  pivot.updateMatrixWorld(true);
+  pivot.userData.radius = box.getSize(new THREE.Vector3()).length() / 2;
+  return pivot;
+}
+
+function loadModel(m, onProgress) {
+  if (cache.has(m.id)) return cache.get(m.id);
+  const p = new Promise((resolve, reject) => {
+    loader.load(m.glb, (gltf) => resolve(prepare(gltf, m)), onProgress, reject);
+  });
+  cache.set(m.id, p);
+  p.catch(() => cache.delete(m.id));
+  return p;
+}
+
+/* ---------- UI helpers ---------- */
+const ui = {
+  loader: $('vLoader'), bar: $('vBar'), pct: $('vPct'),
+  poster: $('vPoster'), posterImg: $('vPosterImg'), badge: $('vBadge'),
+  err: $('vError'), errText: $('vErrorText'),
+  tools: $('vTools'), hint: $('vHint'), tag: $('vTag'), tagText: $('vTagText')
+};
+function showLoader(on) { ui.loader.classList.toggle('show', on); }
+function setProgress(loaded, total) {
+  if (total > 0) {
+    const p = Math.min(100, Math.round((loaded / total) * 100));
+    ui.bar.classList.remove('indeterminate');
+    ui.bar.style.width = p + '%';
+    ui.pct.textContent = p + '%';
+  } else {
+    ui.bar.classList.add('indeterminate');
+    ui.pct.textContent = Math.round(loaded / 1048576) + ' MB';
+  }
+}
+function showError(msg) { ui.errText.innerHTML = msg; ui.err.classList.add('show'); showLoader(false); }
+
+function buildSpecs(m) {
+  const box = $('iSpecs');
+  box.innerHTML = '';
+  if (m.specs && m.specs.length) {
+    box.className = 'feature-list mt-9 max-w-xl';
+    m.specs.forEach(([a, b]) => {
+      const row = document.createElement('div'); row.className = 'feature';
+      const l = document.createElement('span'); l.textContent = a;
+      const r = document.createElement('span'); r.textContent = b;
+      row.append(l, r); box.appendChild(row);
+    });
+  } else {
+    box.className = 'feature-list mt-9 max-w-xl';
+    const d = document.createElement('div'); d.className = 'spec-empty';
+    d.textContent = m.film ? 'CINEMATIC EXPERIENCE AVAILABLE' : 'SPECIFICATIONS ARRIVE WITH THE 3D MODEL';
+    box.appendChild(d);
+  }
+}
+
+function buildRail() {
+  const rail = $('rail');
+  rail.innerHTML = '';
+  MODELS.forEach((m) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'slot'; b.dataset.id = m.id;
+    b.setAttribute('aria-pressed', 'false');
+    const live = !!m.glb;
+    const chipText = live ? '3D LIVE' : (m.film ? 'FILM' : 'COMING SOON');
+    b.innerHTML =
+      '<div class="thumb"><img loading="lazy" alt=""></div>' +
+      '<div class="meta"><div class="name"></div><span class="chip ' + (live ? 'live' : '') + '">' + chipText + '</span></div>';
+    b.querySelector('img').src = m.img;
+    b.querySelector('.name').textContent = m.name;
+    b.addEventListener('click', () => select(m.id));
+    rail.appendChild(b);
+  });
+  const liveCount = MODELS.filter((m) => m.glb).length;
+  $('railCount').textContent = liveCount + ' OF ' + MODELS.length + ' IN 3D';
+}
+
+/* ---------- select a model ---------- */
+const consent = new Set();
+let token = 0;
+async function select(id, fromHash) {
+  const m = MODELS.find((x) => x.id === id) || MODELS[0];
+  if (current === m) return;
+  const my = ++token;
+  current = m;
+
+  // page chrome
+  document.querySelectorAll('.slot').forEach((s) => s.setAttribute('aria-pressed', String(s.dataset.id === m.id)));
+  document.title = m.name + ' — 3D | ALPHA';
+  if (!fromHash) history.replaceState(null, '', '#' + m.id);
+
+  const info = $('info');
+  info.classList.add('out');
+  setTimeout(() => {
+    $('iTag').textContent = m.tag;
+    $('iName').textContent = m.name;
+    $('iLine').textContent = m.line;
+    $('iLine').style.display = m.line ? '' : 'none';
+    $('bgWord').textContent = m.name.toUpperCase();
+    buildSpecs(m);
+    $('iCta').textContent = 'ENQUIRE ABOUT ' + m.name.toUpperCase();
+    const film = $('iFilm');
+    if (m.film) { film.href = m.film; film.hidden = false; } else { film.hidden = true; }
+    info.classList.remove('out');
+  }, 180);
+
+  ui.tagText.textContent = m.name.toUpperCase() + (m.glb ? ' / 3D' : m.film ? ' / FILM' : ' / PREVIEW');
+  ui.tag.classList.toggle('soon', !m.glb);
+  ui.err.classList.remove('show');
+
+  // remove previous model
+  if (activePivot) { scene.remove(activePivot); activePivot = null; }
+  viewerEl.classList.remove('ready');
+
+  if (!m.glb || !renderer) {
+    showLoader(false);
+    ui.posterImg.src = m.img; ui.posterImg.alt = m.name + ' watch';
+    ui.badge.textContent = m.film ? 'EXPERIENCE THE CELESTIA FILM' : (m.glb ? 'PHOTO PREVIEW' : '3D MODEL COMING SOON');
+    ui.poster.classList.add('show');
+    ui.tools.style.display = 'none';
+    ui.hint.style.opacity = '0';
+    if (!renderer && m.glb) showError('Your browser or device could not start the 3D viewer (WebGL is unavailable). The photo is shown instead.');
+    return;
+  }
+
+  // Phones and data-saver users: the Aurelis model is ~20 MB, so ask before downloading it.
+  const heavy = (window.matchMedia('(pointer: coarse)').matches || (navigator.connection && navigator.connection.saveData));
+  if (heavy && !cache.has(m.id) && !consent.has(m.id)) {
+    showLoader(false);
+    ui.posterImg.src = m.img; ui.posterImg.alt = m.name + ' watch';
+    ui.badge.textContent = 'TAP TO LOAD 3D MODEL (≈20 MB)';
+    ui.badge.style.cursor = 'pointer';
+    ui.poster.classList.add('show');
+    ui.tools.style.display = 'none';
+    ui.hint.style.opacity = '0';
+    ui.badge.onclick = () => { consent.add(m.id); ui.badge.onclick = null; ui.badge.style.cursor = ''; current = null; select(m.id, true); };
+    return;
+  }
+  ui.badge.onclick = null; ui.badge.style.cursor = '';
+  ui.poster.classList.remove('show');
+  ui.tools.style.display = '';
+  ui.hint.style.opacity = '1';
+  showLoader(true);
+  setProgress(0, 1);
+
+  try {
+    const pivot = await loadModel(m, (e) => { if (my === token) setProgress(e.loaded, e.lengthComputable ? e.total : 0); });
+    if (my !== token) return;
+    activePivot = pivot;
+    fitRadius = pivot.userData.radius || 0.7;
+    scene.add(pivot);
+    frameCamera(false);
+    controls.autoRotate = spinWanted;
+    showLoader(false);
+    viewerEl.classList.add('ready');
+  } catch (err) {
+    if (my !== token) return;
+    console.error('Model failed to load:', err);
+    if (location.protocol === 'file:') {
+      showError('3D models cannot load when the page is opened by double-clicking the file.<br>Run a local server in this folder, e.g. <code>python -m http.server</code> (or VS Code “Live Server”), then open <code>http://localhost:8000/models.html</code>.');
+    } else {
+      showError('The 3D model could not be loaded. Check that <code>' + m.glb + '</code> sits next to this page, then refresh.');
+    }
+    ui.poster.classList.add('show');
+    ui.posterImg.src = m.img; ui.badge.textContent = 'PHOTO PREVIEW';
+  }
+}
+
+/* ---------- controls wiring ---------- */
+if (controls) {
+  controls.addEventListener('start', () => { controls.autoRotate = false; clearTimeout(resumeTimer); ui.hint.style.opacity = '0'; });
+  controls.addEventListener('end', () => {
+    clearTimeout(resumeTimer);
+    resumeTimer = setTimeout(() => { controls.autoRotate = spinWanted; }, 3500);
+  });
+}
+$('btnSpin').addEventListener('click', (e) => {
+  spinWanted = !spinWanted;
+  e.currentTarget.setAttribute('aria-pressed', String(spinWanted));
+  if (controls) controls.autoRotate = spinWanted;
+});
+$('btnZoomIn').addEventListener('click', () => zoomBy(0.8));
+$('btnZoomOut').addEventListener('click', () => zoomBy(1.25));
+$('btnReset').addEventListener('click', () => { if (activePivot) frameCamera(false); });
+
+/* ---------- render loop (paused when off-screen / tab hidden) ---------- */
+new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; }).observe(viewerEl);
+function tick() {
+  requestAnimationFrame(tick);
+  if (!renderer || !activePivot || !onScreen || document.hidden) return;
+  controls.update();
+  renderer.render(scene, camera);
+}
+tick();
+
+/* ---------- boot ---------- */
+buildRail();
+const fromUrl = () => location.hash.replace('#', '').toLowerCase();
+window.addEventListener('hashchange', () => { const id = fromUrl(); if (MODELS.some((m) => m.id === id)) select(id, true); });
+select(MODELS.some((m) => m.id === fromUrl()) ? fromUrl() : 'aurelis', true);
+window.__viewerReady = true;
+</script>
+
+<script>
+// If the ES-module viewer never started (very old browser / blocked CDN), say so instead of showing an empty box.
+setTimeout(function () {
+  if (window.__viewerReady) return;
+  var e = document.getElementById('vError'), t = document.getElementById('vErrorText');
+  if (e && t) { t.textContent = 'The 3D viewer could not start. Please check your internet connection and use an up-to-date browser.'; e.classList.add('show'); }
+}, 12000);
+</script>
+</body>
+</html>

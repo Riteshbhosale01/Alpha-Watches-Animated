@@ -4,14 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="ALPHA Watches — Define Your Time.">
+<meta name="theme-color" content="#0A0C10">
 <title>ALPHA — Define Your Time</title>
+<link rel="icon" type="image/png" href="alpha-favicon.png">
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="Alpha Aurelis.webp" type="image/webp">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
 
 <script>
@@ -19,8 +23,8 @@ tailwind.config = {
   theme: {
     extend: {
       colors: {
-        ink:'#0B0B0C', coal:'#141416', smoke:'#1D1D20',
-        ivory:'#F4EFE4', bone:'#E9E2D2', gold:'#C6A15B'
+        ink:'#0A0C10', coal:'#141416', smoke:'#1D1D20',
+        ivory:'#F4EFE4', bone:'#E9E2D2', gold:'#D4AF6E'
       },
       fontFamily: {
         serif:['"Cormorant Garamond"','serif'],
@@ -32,7 +36,7 @@ tailwind.config = {
 </script>
 
 <style>
-:root{--ink:#0B0B0C;--gold:#C6A15B;--ivory:#F4EFE4}
+:root{--ink:#0A0C10;--gold:#D4AF6E;--ivory:#F4EFE4}
 *{box-sizing:border-box}
 html{background:var(--ink);scroll-behavior:auto}
 body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-serif;overflow-x:hidden}
@@ -46,50 +50,53 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
 .serif{font-family:"Cormorant Garamond",serif}
 .gold{color:var(--gold)}
 .gold-grad{
- background:linear-gradient(105deg,#eee0bd,#C6A15B 48%,#80632f);
+ background:linear-gradient(105deg,#eee0bd,#D4AF6E 48%,#8a6b35);
  -webkit-background-clip:text;background-clip:text;color:transparent
 }
 .navbar{transition:background .5s,transform .5s,border-color .5s}
-.navbar.scrolled{background:rgba(11,11,12,.82);backdrop-filter:blur(18px);border-color:rgba(198,161,91,.14)}
+.navbar.scrolled{background:rgba(11,11,12,.82);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border-color:rgba(212,175,110,.14)}
+.navbar{position:fixed;top:0;left:0;right:0;z-index:50}
 .navlink{position:relative}
 .navlink:after{content:"";position:absolute;left:0;right:0;bottom:-7px;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:right;transition:transform .45s cubic-bezier(.22,1,.36,1)}
 .navlink:hover:after{transform:scaleX(1);transform-origin:left}
-#preloader{position:fixed;inset:0;background:var(--ink);z-index:100;display:grid;place-items:center;overflow:hidden;transition:opacity .9s cubic-bezier(.22,1,.36,1),visibility .9s}
-#preloader.hide{opacity:0;visibility:hidden}
-.preloader-inner{width:min(430px,78vw);text-align:center;position:relative;display:flex;flex-direction:column;align-items:center}
-.preloader-mark{position:relative;width:min(360px,72vw);aspect-ratio:1;display:grid;place-items:center}
-.preloader-mark:before{content:'';position:absolute;width:72%;height:72%;border:1px solid rgba(198,161,91,.11);border-radius:50%;transform:scale(.82);opacity:0;animation:haloIn 1.4s .05s cubic-bezier(.22,1,.36,1) forwards}
-.preloader-mark:after{content:'';position:absolute;width:56%;height:1px;left:22%;top:50%;background:linear-gradient(90deg,transparent,rgba(198,161,91,.8),transparent);transform:scaleX(0);transform-origin:center;animation:scanLine 1.25s .35s cubic-bezier(.22,1,.36,1) forwards}
-.preloader-logo{width:100%;height:100%;object-fit:contain;display:block;opacity:0;clip-path:inset(100% 0 0 0);filter:blur(5px);transform:scale(.985);animation:logoLoadReveal 2.2s .15s cubic-bezier(.76,0,.24,1) forwards}
-.preloader-loading{width:min(230px,62vw);margin-top:-12px;position:relative;z-index:2}
-.preloader-track{height:1px;background:rgba(244,239,228,.10);overflow:hidden}
-.preloader-progress{display:block;width:0;height:100%;background:linear-gradient(90deg,#80632f,#C6A15B,#eee0bd);box-shadow:0 0 12px rgba(198,161,91,.35)}
-.preloader-meta{margin-top:12px;display:flex;align-items:center;justify-content:space-between;color:rgba(244,239,228,.35);font-size:8px;letter-spacing:.38em}
-.preloader-percent{color:rgba(244,239,228,.65);letter-spacing:.16em;font-variant-numeric:tabular-nums;min-width:42px;text-align:right}
-.preloader-kicker{margin-top:18px;font-size:8px;letter-spacing:.48em;color:rgba(244,239,228,.28);opacity:0;transform:translateY(5px);animation:kickerIn .8s 1.35s ease forwards}
-@keyframes haloIn{to{opacity:1;transform:scale(1)}}
-@keyframes scanLine{0%{transform:scaleX(0);opacity:0}20%{opacity:1}100%{transform:scaleX(1);opacity:0}}
-@keyframes logoLoadReveal{0%{opacity:0;clip-path:inset(100% 0 0 0);filter:blur(5px);transform:scale(.985)}18%{opacity:1}72%{clip-path:inset(0 0 8% 0);filter:blur(.5px);transform:scale(1)}100%{opacity:1;clip-path:inset(0);filter:blur(0);transform:scale(1)}}
-@keyframes kickerIn{to{opacity:1;transform:none}}
+#preloader{position:fixed;inset:0;background:var(--ink);z-index:100;display:grid;place-items:center;overflow:hidden;transition:opacity .8s cubic-bezier(.22,1,.36,1),visibility .8s,transform .8s cubic-bezier(.22,1,.36,1)}
+#preloader.hide{opacity:0;visibility:hidden;transform:scale(1.04)}
+.preloader-inner{width:min(300px,80vw);text-align:center;display:flex;flex-direction:column;align-items:center}
+.preloader-mark{position:relative;width:min(230px,60vw);aspect-ratio:1;display:grid;place-items:center}
+.pl-ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.pl-track{fill:none;stroke:rgba(244,239,228,.09);stroke-width:.7}
+.pl-arc{fill:none;stroke:var(--gold);stroke-width:1.3;stroke-linecap:round;stroke-dasharray:351.86;stroke-dashoffset:351.86;filter:drop-shadow(0 0 3px rgba(212,175,110,.55))}
+.pl-ticks{position:absolute;inset:0;width:100%;height:100%;animation:plSpin 12s linear infinite;opacity:.55}
+.preloader-logo{width:60%;height:60%;object-fit:contain;display:block;opacity:0;animation:plLogo 1.3s .15s cubic-bezier(.22,1,.36,1) forwards}
+.preloader-meta{margin-top:22px;display:flex;align-items:center;gap:14px;color:rgba(244,239,228,.4);font-size:9px;letter-spacing:.4em}
+.preloader-percent{color:rgba(244,239,228,.75);letter-spacing:.14em;font-variant-numeric:tabular-nums;min-width:38px;text-align:left}
+.preloader-kicker{margin-top:14px;font-size:8px;letter-spacing:.48em;color:rgba(244,239,228,.28);opacity:0;animation:plFade .8s 1s ease forwards}
+@keyframes plLogo{0%{opacity:0;transform:scale(.9);filter:blur(5px)}100%{opacity:1;transform:none;filter:blur(0)}}
+@keyframes plFade{to{opacity:1}}
+@keyframes plSpin{to{transform:rotate(360deg)}}
+body.is-loading{overflow:hidden}
+.scroll-cue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:4;display:flex;flex-direction:column;align-items:center;gap:10px;font-size:8px;letter-spacing:.45em;color:rgba(244,239,228,.4);pointer-events:none}
+.scroll-cue i{display:block;width:1px;height:40px;background:linear-gradient(to bottom,var(--gold),transparent);transform-origin:top;animation:cue 2s ease-in-out infinite}
+@keyframes cue{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+.pillar{border-top:1px solid rgba(244,239,228,.12);padding-top:22px}
+@media(max-width:800px){.scroll-cue{bottom:16px}}
 .hero{height:100svh;min-height:680px;position:relative;overflow:hidden}
 .hero-bg{position:absolute;inset:0;background:
- radial-gradient(circle at 50% 48%,rgba(198,161,91,.14),transparent 24%),
+ radial-gradient(circle at 50% 48%,rgba(212,175,110,.14),transparent 24%),
  radial-gradient(circle at 50% 60%,rgba(255,255,255,.035),transparent 48%),
- #0B0B0C}
+ #0A0C10}
 .grid-bg{position:absolute;inset:0;opacity:.14;background-image:linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px);background-size:80px 80px;mask-image:linear-gradient(to bottom,transparent,black 18%,black 75%,transparent)}
 .hero-title{font-size:clamp(4.8rem,15vw,15rem);line-height:.78;letter-spacing:-.055em;font-weight:400}
-.hero-watch{position:absolute;left:50%;top:52%;width:min(45vw,520px);min-width:280px;filter:drop-shadow(0 45px 70px rgba(0,0,0,.72));will-change:transform}
+.hero-watch{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:min(45vw,520px);min-width:260px;height:auto;filter:drop-shadow(0 45px 70px rgba(0,0,0,.72));will-change:transform}
 .hero-copy{position:absolute;z-index:4;inset:0;pointer-events:none}
 .hero-copy .top{position:absolute;left:6vw;top:20%;max-width:290px}
 .hero-copy .bottom{position:absolute;right:6vw;bottom:14%;max-width:270px;text-align:right}
-.scroll-cue{position:absolute;z-index:5;bottom:28px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:.38em;color:rgba(244,239,228,.55)}
-.scroll-cue:after{content:"";display:block;width:1px;height:52px;background:linear-gradient(var(--gold),transparent);margin:12px auto 0}
 .mini-label{font-size:9px;letter-spacing:.42em;color:var(--gold)}
-.rule{height:1px;background:linear-gradient(90deg,transparent,rgba(198,161,91,.8),transparent)}
+.rule{height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,110,.8),transparent)}
 .story{position:relative}
 .story-panel{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden}
 .story-word{font-size:clamp(5rem,14vw,13rem);line-height:.72;letter-spacing:-.06em;color:rgba(244,239,228,.055);white-space:nowrap;position:absolute;left:-2vw;top:13vh}
-.detail-orbit{position:absolute;width:38vw;height:38vw;max-width:520px;max-height:520px;border:1px solid rgba(198,161,91,.22);border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);box-shadow:0 0 100px rgba(198,161,91,.06)}
+.detail-orbit{position:absolute;width:38vw;height:38vw;max-width:520px;max-height:520px;border:1px solid rgba(212,175,110,.22);border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);box-shadow:0 0 100px rgba(212,175,110,.06)}
 .detail-orbit:before,.detail-orbit:after{content:"";position:absolute;border:1px solid rgba(244,239,228,.07);border-radius:50%;inset:10%}
 .detail-orbit:after{inset:24%}
 .detail-watch{position:relative;width:min(31vw,430px);min-width:250px;filter:drop-shadow(0 40px 70px rgba(0,0,0,.75))}
@@ -97,32 +104,52 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
 .feature{padding:22px 0;border-bottom:1px solid rgba(244,239,228,.12);display:flex;justify-content:space-between;gap:20px}
 .feature span:last-child{color:rgba(244,239,228,.45);text-align:right}
 .collection-card{position:relative;overflow:hidden;background:#111214;border:1px solid rgba(255,255,255,.08);transition:transform .6s cubic-bezier(.22,1,.36,1),border-color .6s}
-.collection-card:hover{transform:translateY(-10px);border-color:rgba(198,161,91,.55)}
+.collection-card:hover{transform:translateY(-10px);border-color:rgba(212,175,110,.55)}
 .collection-card img{transition:transform 1s cubic-bezier(.22,1,.36,1);filter:drop-shadow(0 30px 40px rgba(0,0,0,.55))}
 .collection-card:hover img{transform:scale(1.06) rotate(-2deg)}
-.card-glow{position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(198,161,91,.12);filter:blur(70px);left:50%;top:45%;transform:translate(-50%,-50%)}
-.video-wrap{position:relative;height:min(78vh,760px);overflow:hidden;background:#111}
-.video-wrap video{width:100%;height:100%;object-fit:cover;opacity:.68}
+.card-glow{position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(212,175,110,.12);filter:blur(70px);left:50%;top:45%;transform:translate(-50%,-50%)}
 .video-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,11,12,.85),rgba(11,11,12,.2),rgba(11,11,12,.8))}
 .magnetic{transition:transform .2s ease}
 .cta{min-height:85vh;display:grid;place-items:center;position:relative;overflow:hidden}
-.cta:before{content:"";position:absolute;width:55vw;height:55vw;border:1px solid rgba(198,161,91,.12);border-radius:50%;box-shadow:0 0 140px rgba(198,161,91,.08) inset}
+.cta:before{content:"";position:absolute;width:55vw;height:55vw;border:1px solid rgba(212,175,110,.12);border-radius:50%;box-shadow:0 0 140px rgba(212,175,110,.08) inset}
 .reveal{opacity:0;transform:translateY(45px)}
 .reveal-left{opacity:0;transform:translateX(-45px)}
 .reveal-right{opacity:0;transform:translateX(45px)}
-.footer-glow{position:absolute;width:420px;height:420px;right:-140px;top:-120px;border-radius:50%;background:rgba(198,161,91,.08);filter:blur(90px);pointer-events:none}
+.footer-glow{position:absolute;width:420px;height:420px;right:-140px;top:-120px;border-radius:50%;background:rgba(212,175,110,.08);filter:blur(90px);pointer-events:none}
 .social-link{width:42px;height:42px;border:1px solid rgba(244,239,228,.16);display:flex;align-items:center;justify-content:center;color:rgba(244,239,228,.58);position:relative;overflow:hidden;transition:color .35s,border-color .35s,transform .35s}
-.social-link:before{content:'';position:absolute;inset:0;background:#C6A15B;transform:translateY(102%);transition:transform .45s cubic-bezier(.22,1,.36,1)}
+.social-link:before{content:'';position:absolute;inset:0;background:#D4AF6E;transform:translateY(102%);transition:transform .45s cubic-bezier(.22,1,.36,1)}
 .social-link svg{position:relative;z-index:1}
-.social-link:hover{color:#0B0B0C;border-color:#C6A15B;transform:translateY(-3px)}
+.social-link:hover{color:#0A0C10;border-color:#D4AF6E;transform:translateY(-3px)}
 .social-link:hover:before{transform:translateY(0)}
 .footer-reveal{opacity:0;transform:translateY(26px)}
 .scroll-progress{position:fixed;left:0;top:0;width:100%;height:2px;background:rgba(255,255,255,.04);z-index:90;pointer-events:none}
-.scroll-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#80632f,#C6A15B,#eee0bd);transform-origin:left}
+.scroll-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8a6b35,#D4AF6E,#eee0bd);transform-origin:left}
+.menu-btn{width:42px;height:42px;border:1px solid rgba(212,175,110,.45);background:transparent;position:relative;cursor:pointer}
+.menu-btn span{position:absolute;left:11px;right:11px;height:1px;background:var(--gold);transition:transform .4s cubic-bezier(.22,1,.36,1),top .4s}
+.menu-btn span:first-child{top:16px}.menu-btn span:last-child{top:25px}
+.menu-btn[aria-expanded=true] span:first-child{top:20px;transform:rotate(45deg)}
+.menu-btn[aria-expanded=true] span:last-child{top:20px;transform:rotate(-45deg)}
+.mobile-menu{position:fixed;inset:0;z-index:45;background:rgba(11,11,12,.97);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:26px;opacity:0;visibility:hidden;transition:opacity .45s,visibility .45s}
+.mobile-menu.open{opacity:1;visibility:visible}
+.mobile-menu a{font-family:"Cormorant Garamond",serif;font-size:2rem;letter-spacing:.06em;color:rgba(244,239,228,.85)}
+.mobile-menu a:hover,.mobile-menu a.gold{color:var(--gold)}
+body.menu-open{overflow:hidden}
+section[id]{scroll-margin-top:70px}
+.video-wrap{position:relative;aspect-ratio:16/9;width:100%;overflow:hidden;background:#000}
+.video-wrap video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;opacity:.78}
+.video-copy{position:absolute;inset:0;z-index:2;display:flex;align-items:center}
+.video-title{font-size:clamp(2.6rem,6.4vw,6rem);line-height:.82}
+@media(max-width:767px){
+ .video-wrap{aspect-ratio:auto;display:flex;flex-direction:column;background:#0f1012}
+ .video-wrap video{position:relative;inset:auto;aspect-ratio:16/9;height:auto;opacity:1}
+ .video-overlay{display:none}
+ .video-copy{position:relative;inset:auto;padding:34px 0 40px}
+ .video-title{font-size:clamp(3rem,15vw,4.2rem)}
+}
 @media(max-width:800px){
  .hero{min-height:650px}
  .hero-watch{width:72vw;top:52%}
- .hero-title{font-size:23vw;position:absolute;top:43%;left:50%;transform:translateX(-50%);z-index:1}
+ .hero-title{font-size:23vw}
  .hero-copy .top{left:6vw;top:14%;max-width:210px}
  .hero-copy .bottom{right:6vw;bottom:12%;max-width:220px}
  .detail-orbit{width:75vw;height:75vw}
@@ -135,39 +162,48 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
 </style>
 </head>
 
-<body>
+<body class="is-loading">
 <div class="scroll-progress" aria-hidden="true"><i id="scrollProgress"></i></div>
 
-<div id="preloader" aria-label="Loading Alpha Watches">
+<div id="preloader" role="status" aria-label="Loading Alpha Watches">
   <div class="preloader-inner">
     <div class="preloader-mark">
-      <img id="preloaderLogo" class="preloader-logo" src="alpha-preloader-logo.png" alt="ALPHA — Define Your Time">
+      <svg class="pl-ticks" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="59" fill="none" stroke="#D4AF6E" stroke-width=".6" stroke-dasharray=".6 7.2"/></svg>
+      <svg class="pl-ring" viewBox="0 0 120 120" aria-hidden="true"><circle class="pl-track" cx="60" cy="60" r="56"/><circle id="preloaderArc" class="pl-arc" cx="60" cy="60" r="56"/></svg>
+      <img id="preloaderLogo" class="preloader-logo" src="alpha-preloader-logo.png" alt="ALPHA — Define Your Time" width="640" height="640">
     </div>
-    <div class="preloader-loading">
-      <div class="preloader-track"><span id="preloaderProgress" class="preloader-progress"></span></div>
-      <div class="preloader-meta">
-        <span>LOADING</span>
-        <span id="preloaderPercent" class="preloader-percent">00%</span>
-      </div>
-    </div>
+    <div class="preloader-meta"><span>LOADING</span><span id="preloaderPercent" class="preloader-percent">00%</span></div>
     <p class="preloader-kicker">DEFINE YOUR TIME</p>
   </div>
 </div>
 
 <header id="navbar" class="navbar fixed top-0 left-0 right-0 z-50 border-b border-transparent">
-  <nav class="max-w-7xl mx-auto px-6 lg:px-10 py-5 flex items-center justify-between">
-    <a href="index.html"><img src="alpha-logo.png" alt="ALPHA Watches" class="w-[125px] md:w-[155px]"></a>
-    <div class="hidden md:flex items-center gap-9 text-[10px] tracking-wide2 text-ivory/70">
+  <nav class="max-w-7xl mx-auto px-6 lg:px-10 py-5 flex items-center justify-between" aria-label="Main">
+    <a href="index.html"><img src="alpha-logo.png" alt="ALPHA Watches" width="155" height="52" class="w-[125px] md:w-[155px] h-auto"></a>
+    <div class="hidden lg:flex items-center gap-8 text-[10px] tracking-wide2 text-ivory/70">
       <a class="navlink hover:text-gold transition-colors" href="#collection">COLLECTION</a>
       <a class="navlink hover:text-gold transition-colors" href="#craftsmanship">CRAFTSMANSHIP</a>
-      <a class="navlink hover:text-gold transition-colors" href="builder.html">BUILD YOUR ALPHA</a>
+      <a class="navlink hover:text-gold transition-colors" href="models.html">3D MODELS</a>
+      <a class="navlink hover:text-gold transition-colors" href="celestia.html">CELESTIA</a>
       <a class="navlink hover:text-gold transition-colors" href="feedback.html">FEEDBACK</a>
       <a class="navlink hover:text-gold transition-colors" href="enquiries.html">ENQUIRY ACTIVITY</a>
-      <a class="navlink hover:text-gold transition-colors" href="#appointment">BOOK AN ENQUIRY</a>
     </div>
-    <a href="#appointment" class="hidden sm:block text-[9px] tracking-mega text-gold border border-gold/50 px-5 py-2.5 hover:bg-gold hover:text-ink transition-colors">BOOK AN ENQUIRY</a>
+    <div class="flex items-center gap-3">
+      <a href="#appointment" class="hidden sm:block text-[9px] tracking-mega text-gold border border-gold/50 px-5 py-2.5 hover:bg-gold hover:text-ink transition-colors">BOOK AN ENQUIRY</a>
+      <button id="menuBtn" class="lg:hidden menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span></button>
+    </div>
   </nav>
 </header>
+
+<div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+  <a href="#collection">COLLECTION</a>
+  <a href="#craftsmanship">CRAFTSMANSHIP</a>
+  <a href="models.html">3D MODELS</a>
+  <a href="celestia.html">CELESTIA</a>
+  <a href="feedback.html">FEEDBACK</a>
+  <a href="enquiries.html">ENQUIRY ACTIVITY</a>
+  <a href="#appointment" class="gold">BOOK AN ENQUIRY</a>
+</div>
 
 <main>
 
@@ -193,9 +229,10 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
     </div>
   </div>
 
-  <img id="heroWatch" class="hero-watch z-[3]" src="Alpha Aurelis.png" alt="Alpha Aurelis watch">
+  <div class="scroll-cue" aria-hidden="true"><span>SCROLL</span><i></i></div>
 
-  <div class="scroll-cue">SCROLL TO EXPLORE</div>
+  <img id="heroWatch" class="hero-watch z-[3]" src="Alpha Aurelis.webp" alt="Alpha Aurelis watch" width="1106" height="1422" fetchpriority="high">
+
 </section>
 
 <section class="story bg-ink" id="experience">
@@ -211,7 +248,7 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
       </div>
       <div class="relative min-h-[70vh] flex items-center justify-center">
         <div class="detail-orbit"></div>
-        <img id="storyWatch" class="detail-watch z-[2]" src="Alpha Aurelis.png" alt="Aurelis detail">
+        <img id="storyWatch" class="detail-watch z-[2]" src="Alpha Oyster.webp" alt="Alpha Oyster watch" width="1024" height="1536" loading="lazy">
       </div>
     </div>
   </div>
@@ -219,7 +256,7 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
   <div class="story-panel bg-[#0e0e10]" id="craftsmanship">
     <div class="max-w-7xl w-full mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-16 items-center">
       <div class="relative order-2 lg:order-1">
-        <img id="detailWatch" class="w-[70vw] max-w-[520px] mx-auto lg:mx-0 opacity-90" src="Alpha Aurelis.png" alt="Aurelis craftsmanship">
+        <img id="detailWatch" class="w-[54vw] max-w-[350px] mx-auto lg:mx-0 opacity-90" decoding="async" src="Alpha Azure.webp" alt="Alpha Azure craftsmanship detail" width="1024" height="1536" loading="lazy">
       </div>
       <div class="reveal-right order-1 lg:order-2">
         <p class="mini-label mb-6">02 / CRAFTSMANSHIP</p>
@@ -236,7 +273,25 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
   </div>
 </section>
 
-<section id="collection" class="py-28 md:py-36 bg-[#0B0B0C]">
+<section class="py-24 md:py-32 bg-[#0A0C10] relative overflow-hidden" id="story">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 grid lg:grid-cols-[1fr_1.1fr] gap-14 lg:gap-24 items-start">
+    <div class="reveal-left">
+      <p class="mini-label mb-6">ABOUT ALPHA</p>
+      <h2 class="serif text-5xl md:text-7xl leading-[.88]">Built slowly.<br><em class="gold">Worn daily.</em></h2>
+    </div>
+    <div class="reveal-right">
+      <p class="text-base md:text-lg leading-8 text-ivory/60 font-light">Alpha began with a simple question: why should a good watch feel distant? Every design starts with proportion — a case, dial and set of hands sized to sit naturally on the wrist — and is refined until nothing remains that does not earn its place.</p>
+      <p class="mt-6 text-sm leading-7 text-ivory/42 font-light">We take our cues from classic horology and finish each detail for the way people actually live: long days, quick meetings and the occasional celebration. The result is a collection that feels calm, confident and unmistakably yours.</p>
+      <div class="grid sm:grid-cols-3 gap-8 mt-12">
+        <div class="pillar"><p class="mini-label mb-3">01 / PROPORTION</p><p class="text-[13px] leading-6 text-ivory/45 font-light">Cases and dials drawn to sit comfortably on real wrists.</p></div>
+        <div class="pillar"><p class="mini-label mb-3">02 / FINISH</p><p class="text-[13px] leading-6 text-ivory/45 font-light">Brushed and polished surfaces that catch the light differently through the day.</p></div>
+        <div class="pillar"><p class="mini-label mb-3">03 / PROMISE</p><p class="text-[13px] leading-6 text-ivory/45 font-light">Every enquiry is read and answered personally by the Alpha team.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="collection" class="py-28 md:py-36 bg-[#0A0C10]">
   <div class="max-w-7xl mx-auto px-6 lg:px-10">
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
       <div class="reveal">
@@ -247,10 +302,10 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
     </div>
 
     <div class="grid md:grid-cols-3 gap-5">
-      <a class="collection-card reveal group" href="builder.html">
+      <a class="collection-card reveal group" href="models.html#sovereign">
         <div class="card-glow"></div>
         <div class="h-[480px] flex items-center justify-center p-10 relative z-[1]">
-          <img src="Soverign.png" alt="Alpha Sovereign" class="max-h-full max-w-full object-contain">
+          <img src="Soverign.webp" alt="Alpha Sovereign" class="max-h-full max-w-full object-contain" loading="lazy" decoding="async">
         </div>
         <div class="p-7 border-t border-white/10 relative z-[2]">
           <p class="text-[9px] tracking-mega gold mb-2">01 / CLASSIC</p>
@@ -259,10 +314,10 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
         </div>
       </a>
 
-      <a class="collection-card reveal d2 group" href="builder.html">
+      <a class="collection-card reveal group" href="models.html#aurelis">
         <div class="card-glow"></div>
         <div class="h-[480px] flex items-center justify-center p-10 relative z-[1]">
-          <img src="Alpha Aurelis.png" alt="Alpha Aurelis" class="max-h-full max-w-full object-contain">
+          <img src="Alpha Aurelis.webp" alt="Alpha Aurelis" class="max-h-full max-w-full object-contain" loading="lazy" decoding="async">
         </div>
         <div class="p-7 border-t border-white/10 relative z-[2]">
           <p class="text-[9px] tracking-mega gold mb-2">02 / SIGNATURE</p>
@@ -271,10 +326,10 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
         </div>
       </a>
 
-      <a class="collection-card reveal d3 group" href="builder.html">
+      <a class="collection-card reveal group" href="models.html#azure">
         <div class="card-glow"></div>
         <div class="h-[480px] flex items-center justify-center p-10 relative z-[1]">
-          <img src="Alpha Azure.png" alt="Alpha Azure" class="max-h-full max-w-full object-contain">
+          <img src="Alpha Azure.webp" alt="Alpha Azure" class="max-h-[76%] max-w-[76%] object-contain" loading="lazy" decoding="async" width="900" height="1350">
         </div>
         <div class="p-7 border-t border-white/10 relative z-[2]">
           <p class="text-[9px] tracking-mega gold mb-2">03 / MODERN</p>
@@ -289,15 +344,15 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
 <section class="py-20 bg-[#111214]">
   <div class="max-w-7xl mx-auto px-6 lg:px-10">
     <div class="video-wrap reveal">
-      <video autoplay muted loop playsinline poster="Alpha Aurelis.png">
-        <source src="Luxury Watches Commercia Without Watermark.mp4" type="video/mp4">
+      <video id="brandVideo" autoplay muted loop playsinline preload="metadata" poster="video-poster.jpg" width="1280" height="720" aria-label="Alpha watches commercial">
+        <source src="promo.mp4" type="video/mp4">
       </video>
       <div class="video-overlay"></div>
-      <div class="absolute inset-0 z-[2] flex items-center">
-        <div class="px-8 md:px-16 max-w-2xl">
-          <p class="mini-label mb-5">THE ALPHA MINDSET</p>
-          <h2 class="serif text-6xl md:text-8xl leading-[.8]">Wear the<br><em class="gold">moment.</em></h2>
-          <p class="mt-7 text-sm leading-7 text-ivory/55 max-w-md">A watch is not there to tell you what to do with your time. It is there to remind you that it is yours.</p>
+      <div class="video-copy">
+        <div class="px-6 md:px-14 max-w-2xl">
+          <p class="mini-label mb-4 md:mb-5">THE ALPHA MINDSET</p>
+          <h2 class="serif video-title">Wear the<br><em class="gold">moment.</em></h2>
+          <p class="mt-5 md:mt-7 text-sm leading-7 text-ivory/60 max-w-md">A watch is not there to tell you what to do with your time. It is there to remind you that it is yours.</p>
         </div>
       </div>
     </div>
@@ -344,7 +399,8 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
     <p id="apptError" class="hidden mt-5 text-red-300 text-xs font-light tracking-wide">We could not send your enquiry. Please try again or email alphawatches.in@gmail.com directly.</p>
 
     <div class="mt-8 flex flex-wrap justify-center gap-4">
-      <a class="magnetic border border-white/15 text-ivory/60 px-7 py-3 text-[10px] tracking-mega hover:border-gold hover:text-gold transition-colors" href="builder.html">BUILD YOUR ALPHA</a>
+      <a class="magnetic border border-white/15 text-ivory/60 px-7 py-3 text-[10px] tracking-mega hover:border-gold hover:text-gold transition-colors" href="models.html">EXPLORE IN 3D</a>
+      <a class="magnetic border border-white/15 text-ivory/60 px-7 py-3 text-[10px] tracking-mega hover:border-gold hover:text-gold transition-colors" href="celestia.html">CELESTIA FILM</a>
       <a class="magnetic border border-white/15 text-ivory/60 px-7 py-3 text-[10px] tracking-mega hover:border-gold hover:text-gold transition-colors" href="feedback.html">FEEDBACK</a>
     </div>
   </div>
@@ -386,14 +442,15 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
         <ul class="space-y-3 text-[13px] font-light text-ivory/55">
           <li><a href="#experience" class="hover:text-gold transition-colors">The Experience</a></li>
           <li><a href="#craftsmanship" class="hover:text-gold transition-colors">Craftsmanship</a></li>
-          <li><a href="builder.html" class="hover:text-gold transition-colors">Build Your Alpha</a></li>
+          <li><a href="models.html" class="hover:text-gold transition-colors">3D Models</a></li>
+          <li><a href="celestia.html" class="hover:text-gold transition-colors">Celestia Film</a></li>
           <li><a href="feedback.html" class="hover:text-gold transition-colors">Feedback</a></li>
           <li><a href="enquiries.html" class="hover:text-gold transition-colors">Enquiry Activity</a></li>
           <li><a href="#appointment" class="hover:text-gold transition-colors">Book an Enquiry</a></li>
         </ul>
       </div>
     </div>
-    <div class="gold-line mb-8"></div>
+    <div class="rule mb-8"></div>
     <div class="flex flex-col md:flex-row gap-5 items-center justify-between">
       <p class="text-[9px] tracking-wide2 text-ivory/25">© 2026 ALPHA WATCHES</p>
       <div class="text-[9px] tracking-wide2 text-ivory/25">DEFINE YOUR TIME</div>
@@ -402,11 +459,14 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
 </footer>
 
 <script>
-gsap.registerPlugin(ScrollTrigger);
+if (window.gsap && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
+function showAll(){document.querySelectorAll(".reveal,.reveal-left,.reveal-right,.footer-reveal").forEach(function(el){el.style.opacity=1;el.style.transform="none";});}
+const coarsePointer = window.matchMedia("(pointer:coarse)").matches;
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function initAnimations(){
+  if(!window.gsap || !window.ScrollTrigger){ showAll(); return; }
   const navbar = document.getElementById('navbar');
   const heroWatch = document.getElementById('heroWatch');
   const storyWatch = document.getElementById('storyWatch');
@@ -423,7 +483,7 @@ function initAnimations(){
   updateChrome();
 
   if(reduceMotion){
-    gsap.set('.reveal,.reveal-left,.reveal-right',{opacity:1,x:0,y:0});
+    gsap.set('.reveal,.reveal-left,.reveal-right,.footer-reveal',{opacity:1,x:0,y:0});
     return;
   }
 
@@ -433,15 +493,20 @@ function initAnimations(){
 
   // Cinematic entrance: only animate opacity/filter here.
   // Position/rotation/scale are owned by the single ScrollTrigger tween below.
-  gsap.fromTo(heroWatch,
-    {opacity:0, filter:'blur(7px) drop-shadow(0 45px 70px rgba(0,0,0,.72))'},
-    {opacity:1, filter:'blur(0px) drop-shadow(0 45px 70px rgba(0,0,0,.72))', duration:1.35, delay:.15, ease:'power4.out'}
-  );
+  if(coarsePointer){
+    gsap.fromTo(heroWatch,{opacity:0,y:30},{opacity:1,y:0,duration:1.1,delay:.1,ease:'power3.out'});
+  } else {
+    gsap.fromTo(heroWatch,
+      {opacity:0, filter:'blur(7px) drop-shadow(0 45px 70px rgba(0,0,0,.72))'},
+      {opacity:1, filter:'blur(0px) drop-shadow(0 45px 70px rgba(0,0,0,.72))', duration:1.35, delay:.15, ease:'power4.out'}
+    );
+  }
+  gsap.to('.scroll-cue',{opacity:0,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'20% top',scrub:true}});
   gsap.fromTo('.hero-title',
     {y:35, opacity:0, letterSpacing:'.12em'},
     {y:0, opacity:1, letterSpacing:'-.055em', duration:1.25, delay:.3, ease:'power4.out'}
   );
-  gsap.fromTo('.hero-copy .top, .hero-copy .bottom, .scroll-cue',
+  gsap.fromTo('.hero-copy .top, .hero-copy .bottom',
     {opacity:0}, {opacity:1, duration:1.2, delay:.65, stagger:.1, ease:'power2.out'}
   );
 
@@ -521,34 +586,30 @@ function initAnimations(){
 
 }
 
-window.addEventListener('load',()=>{
-  const preloader = document.getElementById('preloader');
-  const progress = document.getElementById('preloaderProgress');
-  const percent = document.getElementById('preloaderPercent');
-  const minDuration = 2600;
-  const startedAt = performance.now();
-  const state = {value:0};
-
-  // Calm, luxury-style loading sequence: real page load gates the exit,
-  // while the visible counter and bar make the wait feel intentional.
-  gsap.to(state,{
-    value:100,
-    duration:2.25,
-    ease:'power2.inOut',
-    onUpdate:()=>{
-      const value=Math.round(state.value);
-      progress.style.width=value+'%';
-      percent.textContent=String(value).padStart(2,'0')+'%';
-    },
-    onComplete:()=>{
-      const remaining=Math.max(0,minDuration-(performance.now()-startedAt));
-      setTimeout(()=>{
-        preloader.classList.add('hide');
-        initAnimations();
-      },remaining);
-    }
-  });
-});
+(function(){
+  const pre=document.getElementById('preloader');
+  const arc=document.getElementById('preloaderArc');
+  const pct=document.getElementById('preloaderPercent');
+  const C=351.86, MIN=1700, MAX=9000;
+  const t0=performance.now();
+  let loaded=document.readyState==='complete', done=false;
+  window.addEventListener('load',()=>{loaded=true;});
+  function setP(v){ arc.style.strokeDashoffset=(C*(1-v/100)).toFixed(2); pct.textContent=String(Math.round(v)).padStart(2,'0')+'%'; }
+  function finish(){
+    if(done) return; done=true; setP(100);
+    document.body.classList.remove('is-loading');
+    setTimeout(()=>{ pre.classList.add('hide'); try{ initAnimations(); }catch(e){ console.error(e); showAll(); } if(window.AlphaFX) AlphaFX.chime(); },260);
+    setTimeout(()=>{ pre.style.display='none'; },1300);
+  }
+  // progress eases toward 92% on its own; it only reaches 100% once the page has really loaded
+  (function step(){
+    const t=performance.now()-t0, k=Math.min(t/MIN,1);
+    let v=92*(1-Math.pow(1-k,2));
+    if(loaded && t>=MIN){ finish(); return; }
+    if(t>MAX){ finish(); return; }
+    setP(v); requestAnimationFrame(step);
+  })();
+})();
 </script>
 
 <script>
@@ -637,5 +698,37 @@ enquiryFrame.addEventListener('load', () => {
   setTimeout(() => { reserveText.textContent = 'BOOK AN ENQUIRY'; }, 3500);
 });
 </script>
+
+<script>
+// Mobile menu
+(() => {
+  const btn = document.getElementById('menuBtn');
+  const menu = document.getElementById('mobileMenu');
+  if (!btn || !menu) return;
+  const set = (open) => {
+    menu.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open);
+    btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    menu.setAttribute('aria-hidden', !open);
+    document.body.classList.toggle('menu-open', open);
+    if (window.__lenis) { open ? window.__lenis.stop() : window.__lenis.start(); }
+  };
+  btn.addEventListener('click', () => set(!menu.classList.contains('open')));
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => set(false)));
+  window.addEventListener('keydown', e => { if (e.key === 'Escape') set(false); });
+  window.addEventListener('resize', () => { if (window.innerWidth >= 1024) set(false); });
+})();
+
+// Play the commercial only while visible
+(() => {
+  const v = document.getElementById('brandVideo');
+  if (!v || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(([e]) => {
+    if (e.isIntersecting) { v.play().catch(() => {}); } else { v.pause(); }
+  }, { threshold: .25 }).observe(v);
+})();
+</script>
+<script src="fx.js" defer></script>
+<noscript><style>.reveal,.reveal-left,.reveal-right,.footer-reveal{opacity:1!important;transform:none!important}#preloader{display:none}body.is-loading{overflow:auto}</style></noscript>
 </body>
 </html>
