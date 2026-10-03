@@ -90,3 +90,9 @@ UPDATE 6
 ========
 - Oyster 3D model added (Oyster_Model.glb, ~20 MB, same compression as Aurelis/Sovereign/Celestia, so no new decoder needed).
   All five watches are now live in 3D. Home page: the Oyster photo label and the footer Collection list now link to models.html#oyster.
+
+
+UPDATE 7
+========
+- Celestia film frames now load from celestia-frames.zip (desktop, 240 frames) and celestia-frames-m.zip (phones, 121 frames) via JSZip;
+  the two frame folders were removed. celestia.html lines 14, 230 and the loadAll function were changed.

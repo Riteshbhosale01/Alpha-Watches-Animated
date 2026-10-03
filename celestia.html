@@ -11,6 +11,7 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
@@ -225,9 +226,9 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
   if (window.ALPHA_REDIRECT) return;   // phones are sent to aurelis-film.html: don't download the frames
 
   /* ------------ config ------------ */
-  var TOTAL = 240;                       // frames in celestia-frames/  (f000.webp … f239.webp)
+  var TOTAL = 240;                       // frames in celestia-frames.zip  (f000.webp … f239.webp)
   var coarse = window.matchMedia('(max-width: 767px), (pointer: coarse)').matches;
-  var PATH  = coarse ? 'celestia-frames-m/f' : 'celestia-frames/f';   // phones get 960px frames (about a third of the data)
+  var ZIP   = coarse ? 'celestia-frames-m.zip' : 'celestia-frames.zip';   // phones get the 960px set
   var STEP  = coarse ? 2 : 1;            // phones load every 2nd frame (half the data, same look)
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -253,28 +254,40 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
 
   function pad(n) { return ('000' + n).slice(-3); }
 
-  function loadOne(k, done) {
-    var img = new Image();
-    img.decoding = 'async';
-    img.onload = img.onerror = function () { loaded++; done(); };
-    img.src = PATH + pad(list[k]) + '.webp';
-    frames[k] = img;
-  }
-
-  // load in order with a small pool so the first frames arrive first
+  // Download the zip once, unzip it in the browser, and turn each frame into an image.
   function loadAll(onProgress, onFinish) {
-    var next = 0, active = 0, POOL = coarse ? 6 : 8;
-    function pump() {
-      while (active < POOL && next < N) {
-        active++;
-        loadOne(next++, function () {
-          active--;
-          onProgress(loaded / N);
-          if (loaded === N) onFinish(); else pump();
+    var finished = false;
+    function finish() { if (!finished) { finished = true; onFinish(); } }
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', ZIP);
+    xhr.responseType = 'arraybuffer';
+    xhr.onprogress = function (e) { if (e.lengthComputable) onProgress(0.3 * e.loaded / e.total); };
+    xhr.onerror = finish;
+    xhr.onload = function () {
+      if (xhr.status !== 200 || !window.JSZip) { finish(); return; }
+      JSZip.loadAsync(xhr.response).then(function (zip) {
+        var files = {};
+        zip.forEach(function (path, entry) {
+          var m = path.match(/f(\d{3})\.webp$/i);
+          if (m && !entry.dir) files[parseInt(m[1], 10)] = entry;
         });
-      }
-    }
-    pump();
+        function one(k) {
+          var img = new Image();
+          img.decoding = 'async';
+          frames[k] = img;
+          var entry = files[list[k]];
+          function done() { loaded++; onProgress(0.3 + 0.7 * loaded / N); if (loaded === N) finish(); }
+          if (!entry) { done(); return Promise.resolve(); }
+          return entry.async('blob').then(function (b) {
+            img.onload = img.onerror = done;
+            img.src = URL.createObjectURL(new Blob([b], { type: 'image/webp' }));
+          });
+        }
+        var chain = Promise.resolve();   // in order, so the first frames are ready first
+        for (var k = 0; k < N; k++) (function (k) { chain = chain.then(function () { return one(k); }); })(k);
+      }, finish);
+    };
+    xhr.send();
   }
 
   /* ------------ canvas sizing / drawing ------------ */
