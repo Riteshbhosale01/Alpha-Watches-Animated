@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="mobile-film.js"></script>
 <meta name="description" content="Explore Alpha watches in 3D — rotate, zoom and inspect every detail.">
 <meta name="theme-color" content="#0A0C10">
 <title>3D Models | ALPHA — Define Your Time</title>
@@ -41,7 +42,7 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
 .mini-label{font-size:9px;letter-spacing:.42em;color:var(--gold)}
 .rule{height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,110,.8),transparent)}
 .tracking-mega{letter-spacing:.42em}
-.navbar{background:rgba(11,11,12,.82);-webkit-backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border-bottom:1px solid rgba(212,175,110,.14)}
+.navbar{background:rgba(11,11,12,.82);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border-bottom:1px solid rgba(212,175,110,.14)}
 .navbar{position:fixed;top:0;left:0;right:0;z-index:50}
 .navlink{position:relative}
 .navlink:after{content:"";position:absolute;left:0;right:0;bottom:-7px;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:right;transition:transform .45s cubic-bezier(.22,1,.36,1)}
@@ -73,7 +74,7 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
 .v-tag.soon i{background:#5b5b60;box-shadow:none}
 .v-hint{position:absolute;left:0;right:0;bottom:16px;text-align:center;font-size:9px;letter-spacing:.3em;color:rgba(244,239,228,.32);pointer-events:none;transition:opacity .6s}
 .v-tools{position:absolute;right:14px;bottom:12px;display:flex;gap:8px;z-index:3}
-.tool{width:40px;height:40px;border:1px solid rgba(244,239,228,.16);background:rgba(11,11,12,.55);-webkit-backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:rgba(244,239,228,.7);display:grid;place-items:center;cursor:pointer;transition:color .3s,border-color .3s,background .3s}
+.tool{width:40px;height:40px;border:1px solid rgba(244,239,228,.16);background:rgba(11,11,12,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:rgba(244,239,228,.7);display:grid;place-items:center;cursor:pointer;transition:color .3s,border-color .3s,background .3s}
 .tool:hover,.tool[aria-pressed=true]{color:var(--gold);border-color:rgba(212,175,110,.6)}
 .tool svg{width:17px;height:17px}
 
@@ -146,6 +147,7 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
       <a class="navlink hover:text-gold transition-colors" href="index.html#collection">COLLECTION</a>
       <a class="navlink text-gold" href="models.html" aria-current="page">3D MODELS</a>
       <a class="navlink hover:text-gold transition-colors" href="celestia.html">CELESTIA</a>
+      <a class="navlink hover:text-gold transition-colors" href="aurelis-film.html">AURELIS FILM</a>
       <a class="navlink hover:text-gold transition-colors" href="feedback.html">FEEDBACK</a>
       <a class="navlink hover:text-gold transition-colors" href="enquiries.html">ENQUIRY ACTIVITY</a>
     </div>
@@ -160,7 +162,7 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
   <a href="index.html">HOME</a>
   <a href="index.html#collection">COLLECTION</a>
   <a href="models.html" aria-current="page">3D MODELS</a>
-  <a href="celestia.html">CELESTIA</a>
+  <a href="aurelis-film.html">AURELIS FILM</a>
   <a href="feedback.html">FEEDBACK</a>
   <a href="enquiries.html">ENQUIRY ACTIVITY</a>
   <a href="index.html#appointment" class="gold">BOOK AN ENQUIRY</a>
@@ -226,6 +228,7 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
         <p id="iTag" class="mini-label mb-5">02 / SIGNATURE</p>
         <h1 id="iName" class="serif text-6xl md:text-8xl leading-[.85]">Aurelis</h1>
         <p id="iLine" class="mt-6 max-w-md text-sm leading-7 text-ivory/50 font-light">A warmer expression of precision.</p>
+        <p id="iPrice" class="mt-5 flex items-baseline gap-3"><span class="text-[9px] tracking-[.4em] text-ivory/40">FROM</span><span class="serif text-4xl text-gold">₹18,500</span></p>
 
         <div id="iSpecs" class="feature-list mt-9 max-w-xl"></div>
 
@@ -256,7 +259,8 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
     <a href="index.html"><img src="alpha-logo.png" alt="ALPHA" width="155" height="52" class="w-[125px] md:w-[155px] h-auto opacity-85"></a>
     <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-[9px] tracking-[.25em] text-ivory/35">
       <a href="index.html" class="hover:text-gold transition-colors">HOME</a>
-      <a href="celestia.html" class="hover:text-gold transition-colors">CELESTIA FILM</a>
+      <a href="celestia.html" class="hover:text-gold transition-colors celestia-link">CELESTIA FILM</a>
+      <a href="aurelis-film.html" class="hover:text-gold transition-colors">AURELIS FILM</a>
       <a href="feedback.html" class="hover:text-gold transition-colors">FEEDBACK</a>
       <a href="index.html#appointment" class="hover:text-gold transition-colors">BOOK AN ENQUIRY</a>
       <span>© 2026 ALPHA WATCHES</span>
@@ -271,6 +275,7 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
@@ -285,20 +290,21 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
    ===================================================================== */
 const MODELS = [
   { id:'aurelis',   name:'Aurelis',   tag:'02 / SIGNATURE', line:'A warmer expression of precision.',
-    img:'Alpha Aurelis.webp', glb:'Aurelis_Model.glb', rotation:[0,0,0],
+    img:'Alpha Aurelis.webp', glb:'Aurelis_Model.glb', rotation:[0,0,0], price:'₹18,500', mb:20, film:'aurelis-film.html',
     specs:[['Movement','Automatic / 21 Jewels'],['Dial','Brushed black texture'],['Calendar','Day & date display'],['Case','Rose-gold finish']] },
 
   { id:'sovereign', name:'Sovereign', tag:'01 / CLASSIC',   line:'Quiet authority.',
-    img:'Soverign.webp', glb:null, specs:[] },
+    img:'Soverign.webp', glb:'Sovereign_Model.glb', rotation:[0,0,0], mb:17, price:'₹10,000', specs:[] },
 
   { id:'azure',     name:'Azure',     tag:'03 / MODERN',    line:'A sharper point of view.',
-    img:'Alpha Azure.webp', glb:null, specs:[] },
+    img:'Alpha Azure.webp', glb:'Azure_Model.glb', rotation:[0,0,0], mb:24, price:'₹15,000', specs:[] },
 
   { id:'oyster',    name:'Oyster',    tag:'04 / OYSTER',    line:'',
-    img:'Alpha Oyster.webp', glb:null, specs:[] },
+    img:'Alpha Oyster.webp', glb:'Oyster_Model.glb', rotation:[0,0,0], mb:20, price:'₹12,500', specs:[] },
 
   { id:'celestia',  name:'Celestia',  tag:'C001 / CHRONOGRAPH', line:'The chronograph, taken apart and put back together — told through scroll.',
-    img:'alpha-c001-chronograph-celestia.webp', glb:null, film:'celestia.html', specs:[] }
+    img:'alpha-c001-chronograph-celestia.webp', glb:'Celestia_Model.glb', rotation:[0,0,0], mb:19, price:'₹24,000', get film() { return window.ALPHA_PHONE ? 'aurelis-film.html' : 'celestia.html'; },
+    specs:[['Model','Celestia C001'],['Type','Chronograph']] }
 ];
 
 const $ = (id) => document.getElementById(id);
@@ -308,7 +314,8 @@ const viewerEl = $('viewer');
 /* ---------- renderer / scene ---------- */
 let renderer;
 try {
-  renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true, powerPreference:'high-performance' });
+  const touchDevice = window.matchMedia('(pointer: coarse)').matches;   // phones/tablets: lighter rendering
+  renderer = new THREE.WebGLRenderer({ antialias:!touchDevice, alpha:true, powerPreference:'high-performance' });
 } catch (e) { renderer = null; }
 
 const scene = new THREE.Scene();
@@ -316,7 +323,7 @@ const camera = new THREE.PerspectiveCamera(28, 1, 0.01, 100);
 let controls = null;
 
 if (renderer) {
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, window.matchMedia('(pointer: coarse)').matches ? 1.5 : 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
@@ -349,7 +356,10 @@ if (renderer) {
 
 /* ---------- state ---------- */
 const loader = new GLTFLoader();
-loader.setMeshoptDecoder(MeshoptDecoder);   // the Aurelis GLB uses EXT_meshopt_compression
+loader.setMeshoptDecoder(MeshoptDecoder);   // Aurelis, Sovereign and Celestia use EXT_meshopt_compression
+const draco = new DRACOLoader();            // Azure uses KHR_draco_mesh_compression
+draco.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/gltf/');
+loader.setDRACOLoader(draco);
 const cache = new Map();
 let current = null;
 let activePivot = null;
@@ -473,7 +483,7 @@ function buildSpecs(m) {
   } else {
     box.className = 'feature-list mt-9 max-w-xl';
     const d = document.createElement('div'); d.className = 'spec-empty';
-    d.textContent = m.film ? 'CINEMATIC EXPERIENCE AVAILABLE' : 'SPECIFICATIONS ARRIVE WITH THE 3D MODEL';
+    d.textContent = m.film ? 'CINEMATIC EXPERIENCE AVAILABLE' : m.glb ? 'DRAG THE WATCH TO INSPECT EVERY ANGLE' : 'SPECIFICATIONS ARRIVE WITH THE 3D MODEL';
     box.appendChild(d);
   }
 }
@@ -520,6 +530,7 @@ async function select(id, fromHash) {
     $('iName').textContent = m.name;
     $('iLine').textContent = m.line;
     $('iLine').style.display = m.line ? '' : 'none';
+    $('iPrice').querySelector('span:last-child').textContent = m.price || '₹10,000';
     $('bgWord').textContent = m.name.toUpperCase();
     buildSpecs(m);
     $('iCta').textContent = 'ENQUIRE ABOUT ' + m.name.toUpperCase();
@@ -539,7 +550,7 @@ async function select(id, fromHash) {
   if (!m.glb || !renderer) {
     showLoader(false);
     ui.posterImg.src = m.img; ui.posterImg.alt = m.name + ' watch';
-    ui.badge.textContent = m.film ? 'EXPERIENCE THE CELESTIA FILM' : (m.glb ? 'PHOTO PREVIEW' : '3D MODEL COMING SOON');
+    ui.badge.textContent = m.glb ? 'PHOTO PREVIEW' : m.film ? (window.ALPHA_PHONE ? 'WATCH THE AURELIS FILM' : 'EXPERIENCE THE CELESTIA FILM') : '3D MODEL COMING SOON';
     ui.poster.classList.add('show');
     ui.tools.style.display = 'none';
     ui.hint.style.opacity = '0';
@@ -547,12 +558,12 @@ async function select(id, fromHash) {
     return;
   }
 
-  // Phones and data-saver users: the Aurelis model is ~20 MB, so ask before downloading it.
+  // Phones and data-saver users: the models are 17–24 MB, so ask before downloading it.
   const heavy = (window.matchMedia('(pointer: coarse)').matches || (navigator.connection && navigator.connection.saveData));
   if (heavy && !cache.has(m.id) && !consent.has(m.id)) {
     showLoader(false);
     ui.posterImg.src = m.img; ui.posterImg.alt = m.name + ' watch';
-    ui.badge.textContent = 'TAP TO LOAD 3D MODEL (≈20 MB)';
+    ui.badge.textContent = 'TAP TO LOAD 3D MODEL (≈' + (m.mb || 20) + ' MB)';
     ui.badge.style.cursor = 'pointer';
     ui.poster.classList.add('show');
     ui.tools.style.display = 'none';

@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="mobile-film.js"></script>
 <meta name="description" content="ALPHA Watches — Define Your Time.">
 <meta name="theme-color" content="#0A0C10">
 <title>ALPHA — Define Your Time</title>
@@ -75,11 +76,7 @@ body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-ser
 @keyframes plFade{to{opacity:1}}
 @keyframes plSpin{to{transform:rotate(360deg)}}
 body.is-loading{overflow:hidden}
-.scroll-cue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:4;display:flex;flex-direction:column;align-items:center;gap:10px;font-size:8px;letter-spacing:.45em;color:rgba(244,239,228,.4);pointer-events:none}
-.scroll-cue i{display:block;width:1px;height:40px;background:linear-gradient(to bottom,var(--gold),transparent);transform-origin:top;animation:cue 2s ease-in-out infinite}
-@keyframes cue{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
 .pillar{border-top:1px solid rgba(244,239,228,.12);padding-top:22px}
-@media(max-width:800px){.scroll-cue{bottom:16px}}
 .hero{height:100svh;min-height:680px;position:relative;overflow:hidden}
 .hero-bg{position:absolute;inset:0;background:
  radial-gradient(circle at 50% 48%,rgba(212,175,110,.14),transparent 24%),
@@ -140,10 +137,10 @@ section[id]{scroll-margin-top:70px}
 .video-copy{position:absolute;inset:0;z-index:2;display:flex;align-items:center}
 .video-title{font-size:clamp(2.6rem,6.4vw,6rem);line-height:.82}
 @media(max-width:767px){
- .video-wrap{aspect-ratio:auto;display:flex;flex-direction:column;background:#0f1012}
+ .video-wrap{aspect-ratio:auto;display:flex;flex-direction:column;background:#0f1012;width:calc(100% + 48px);margin-left:-24px;margin-right:-24px}
  .video-wrap video{position:relative;inset:auto;aspect-ratio:16/9;height:auto;opacity:1}
  .video-overlay{display:none}
- .video-copy{position:relative;inset:auto;padding:34px 0 40px}
+ .video-copy{position:relative;inset:auto;padding:30px 0 36px}
  .video-title{font-size:clamp(3rem,15vw,4.2rem)}
 }
 @media(max-width:800px){
@@ -185,6 +182,7 @@ section[id]{scroll-margin-top:70px}
       <a class="navlink hover:text-gold transition-colors" href="#craftsmanship">CRAFTSMANSHIP</a>
       <a class="navlink hover:text-gold transition-colors" href="models.html">3D MODELS</a>
       <a class="navlink hover:text-gold transition-colors" href="celestia.html">CELESTIA</a>
+      <a class="navlink hover:text-gold transition-colors" href="aurelis-film.html">AURELIS FILM</a>
       <a class="navlink hover:text-gold transition-colors" href="feedback.html">FEEDBACK</a>
       <a class="navlink hover:text-gold transition-colors" href="enquiries.html">ENQUIRY ACTIVITY</a>
     </div>
@@ -199,7 +197,7 @@ section[id]{scroll-margin-top:70px}
   <a href="#collection">COLLECTION</a>
   <a href="#craftsmanship">CRAFTSMANSHIP</a>
   <a href="models.html">3D MODELS</a>
-  <a href="celestia.html">CELESTIA</a>
+  <a href="aurelis-film.html">AURELIS FILM</a>
   <a href="feedback.html">FEEDBACK</a>
   <a href="enquiries.html">ENQUIRY ACTIVITY</a>
   <a href="#appointment" class="gold">BOOK AN ENQUIRY</a>
@@ -213,7 +211,7 @@ section[id]{scroll-margin-top:70px}
 
   <div class="hero-copy">
     <div class="top">
-      <p class="mini-label mb-4">AURELIS / 01</p>
+      <p class="mini-label mb-4">AURELIS / 02</p>
       <p class="text-sm leading-relaxed text-ivory/50 font-light">A study in precision, proportion and presence. Designed for those who define their own time.</p>
     </div>
     <div class="bottom">
@@ -228,8 +226,6 @@ section[id]{scroll-margin-top:70px}
       <div class="hero-title serif gold-grad">ALPHA</div>
     </div>
   </div>
-
-  <div class="scroll-cue" aria-hidden="true"><span>SCROLL</span><i></i></div>
 
   <img id="heroWatch" class="hero-watch z-[3]" src="Alpha Aurelis.webp" alt="Alpha Aurelis watch" width="1106" height="1422" fetchpriority="high">
 
@@ -249,6 +245,7 @@ section[id]{scroll-margin-top:70px}
       <div class="relative min-h-[70vh] flex items-center justify-center">
         <div class="detail-orbit"></div>
         <img id="storyWatch" class="detail-watch z-[2]" src="Alpha Oyster.webp" alt="Alpha Oyster watch" width="1024" height="1536" loading="lazy">
+        <a href="models.html#oyster" class="mini-label absolute bottom-4 left-1/2 -translate-x-1/2 z-[3] whitespace-nowrap hover:opacity-80 transition-opacity">ALPHA OYSTER · VIEW IN 3D →</a>
       </div>
     </div>
   </div>
@@ -257,6 +254,7 @@ section[id]{scroll-margin-top:70px}
     <div class="max-w-7xl w-full mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-16 items-center">
       <div class="relative order-2 lg:order-1">
         <img id="detailWatch" class="w-[54vw] max-w-[350px] mx-auto lg:mx-0 opacity-90" decoding="async" src="Alpha Azure.webp" alt="Alpha Azure craftsmanship detail" width="1024" height="1536" loading="lazy">
+        <p class="mini-label mt-5 text-center lg:text-left">ALPHA AZURE</p>
       </div>
       <div class="reveal-right order-1 lg:order-2">
         <p class="mini-label mb-6">02 / CRAFTSMANSHIP</p>
@@ -311,6 +309,7 @@ section[id]{scroll-margin-top:70px}
           <p class="text-[9px] tracking-mega gold mb-2">01 / CLASSIC</p>
           <h3 class="serif text-4xl">Sovereign</h3>
           <p class="text-xs text-ivory/40 mt-2">Quiet authority.</p>
+          <p class="mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-1"><span class="text-[9px] tracking-mega text-ivory/40">FROM</span><span class="serif gold text-2xl">₹10,000</span><span class="ml-auto whitespace-nowrap text-[9px] tracking-wide2 text-ivory/35 group-hover:text-gold transition-colors">VIEW IN 3D →</span></p>
         </div>
       </a>
 
@@ -323,6 +322,7 @@ section[id]{scroll-margin-top:70px}
           <p class="text-[9px] tracking-mega gold mb-2">02 / SIGNATURE</p>
           <h3 class="serif text-4xl">Aurelis</h3>
           <p class="text-xs text-ivory/40 mt-2">A warmer expression of precision.</p>
+          <p class="mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-1"><span class="text-[9px] tracking-mega text-ivory/40">FROM</span><span class="serif gold text-2xl">₹18,500</span><span class="ml-auto whitespace-nowrap text-[9px] tracking-wide2 text-ivory/35 group-hover:text-gold transition-colors">VIEW IN 3D →</span></p>
         </div>
       </a>
 
@@ -335,6 +335,7 @@ section[id]{scroll-margin-top:70px}
           <p class="text-[9px] tracking-mega gold mb-2">03 / MODERN</p>
           <h3 class="serif text-4xl">Azure</h3>
           <p class="text-xs text-ivory/40 mt-2">A sharper point of view.</p>
+          <p class="mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-1"><span class="text-[9px] tracking-mega text-ivory/40">FROM</span><span class="serif gold text-2xl">₹15,000</span><span class="ml-auto whitespace-nowrap text-[9px] tracking-wide2 text-ivory/35 group-hover:text-gold transition-colors">VIEW IN 3D →</span></p>
         </div>
       </a>
     </div>
@@ -344,7 +345,7 @@ section[id]{scroll-margin-top:70px}
 <section class="py-20 bg-[#111214]">
   <div class="max-w-7xl mx-auto px-6 lg:px-10">
     <div class="video-wrap reveal">
-      <video id="brandVideo" autoplay muted loop playsinline preload="metadata" poster="video-poster.jpg" width="1280" height="720" aria-label="Alpha watches commercial">
+      <video id="brandVideo" muted loop playsinline disablepictureinpicture preload="none" poster="video-poster.jpg" width="1280" height="720" aria-label="Alpha watches commercial">
         <source src="promo.mp4" type="video/mp4">
       </video>
       <div class="video-overlay"></div>
@@ -400,7 +401,8 @@ section[id]{scroll-margin-top:70px}
 
     <div class="mt-8 flex flex-wrap justify-center gap-4">
       <a class="magnetic border border-white/15 text-ivory/60 px-7 py-3 text-[10px] tracking-mega hover:border-gold hover:text-gold transition-colors" href="models.html">EXPLORE IN 3D</a>
-      <a class="magnetic border border-white/15 text-ivory/60 px-7 py-3 text-[10px] tracking-mega hover:border-gold hover:text-gold transition-colors" href="celestia.html">CELESTIA FILM</a>
+      <a class="magnetic border border-white/15 text-ivory/60 px-7 py-3 text-[10px] tracking-mega hover:border-gold hover:text-gold transition-colors celestia-link" href="celestia.html">CELESTIA FILM</a>
+      <a class="magnetic border border-white/15 text-ivory/60 px-7 py-3 text-[10px] tracking-mega hover:border-gold hover:text-gold transition-colors" href="aurelis-film.html">AURELIS FILM</a>
       <a class="magnetic border border-white/15 text-ivory/60 px-7 py-3 text-[10px] tracking-mega hover:border-gold hover:text-gold transition-colors" href="feedback.html">FEEDBACK</a>
     </div>
   </div>
@@ -432,9 +434,10 @@ section[id]{scroll-margin-top:70px}
       <div class="footer-reveal">
         <p class="text-[10px] tracking-mega text-gold mb-6">COLLECTION</p>
         <ul class="space-y-3 text-[13px] font-light text-ivory/55">
-          <li><a href="#collection" class="hover:text-gold transition-colors">Sovereign</a></li>
-          <li><a href="#collection" class="hover:text-gold transition-colors">Aurelis</a></li>
-          <li><a href="#collection" class="hover:text-gold transition-colors">Azure</a></li>
+          <li><a href="models.html#sovereign" class="hover:text-gold transition-colors">Sovereign</a></li>
+          <li><a href="models.html#aurelis" class="hover:text-gold transition-colors">Aurelis</a></li>
+          <li><a href="models.html#azure" class="hover:text-gold transition-colors">Azure</a></li>
+          <li><a href="models.html#oyster" class="hover:text-gold transition-colors">Oyster</a></li>
         </ul>
       </div>
       <div class="footer-reveal">
@@ -443,7 +446,8 @@ section[id]{scroll-margin-top:70px}
           <li><a href="#experience" class="hover:text-gold transition-colors">The Experience</a></li>
           <li><a href="#craftsmanship" class="hover:text-gold transition-colors">Craftsmanship</a></li>
           <li><a href="models.html" class="hover:text-gold transition-colors">3D Models</a></li>
-          <li><a href="celestia.html" class="hover:text-gold transition-colors">Celestia Film</a></li>
+          <li class="celestia-link"><a href="celestia.html" class="hover:text-gold transition-colors">Celestia Film</a></li>
+          <li><a href="aurelis-film.html" class="hover:text-gold transition-colors">Aurelis Film</a></li>
           <li><a href="feedback.html" class="hover:text-gold transition-colors">Feedback</a></li>
           <li><a href="enquiries.html" class="hover:text-gold transition-colors">Enquiry Activity</a></li>
           <li><a href="#appointment" class="hover:text-gold transition-colors">Book an Enquiry</a></li>
@@ -501,7 +505,6 @@ function initAnimations(){
       {opacity:1, filter:'blur(0px) drop-shadow(0 45px 70px rgba(0,0,0,.72))', duration:1.35, delay:.15, ease:'power4.out'}
     );
   }
-  gsap.to('.scroll-cue',{opacity:0,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'20% top',scrub:true}});
   gsap.fromTo('.hero-title',
     {y:35, opacity:0, letterSpacing:'.12em'},
     {y:0, opacity:1, letterSpacing:'-.055em', duration:1.25, delay:.3, ease:'power4.out'}
@@ -719,13 +722,20 @@ enquiryFrame.addEventListener('load', () => {
   window.addEventListener('resize', () => { if (window.innerWidth >= 1024) set(false); });
 })();
 
-// Play the commercial only while visible
+// Commercial: phones get a lighter 480p file; it only downloads/plays while on screen
 (() => {
   const v = document.getElementById('brandVideo');
-  if (!v || !('IntersectionObserver' in window)) return;
+  if (!v) return;
+  const conn = navigator.connection || {};
+  if (window.matchMedia('(max-width: 767px)').matches || conn.saveData) {
+    v.querySelector('source').src = 'promo-m.mp4';   // 0.65 MB instead of 1.4 MB
+    v.load();
+  }
+  v.addEventListener('click', () => { if (v.paused) v.play().catch(() => {}); });   // tap to start if the phone blocked autoplay
+  if (!('IntersectionObserver' in window)) { v.play().catch(() => {}); return; }
   new IntersectionObserver(([e]) => {
     if (e.isIntersecting) { v.play().catch(() => {}); } else { v.pause(); }
-  }, { threshold: .25 }).observe(v);
+  }, { threshold: .25, rootMargin: '200px 0px' }).observe(v);
 })();
 </script>
 <script src="fx.js" defer></script>

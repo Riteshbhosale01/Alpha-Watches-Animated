@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Alpha Aurelis — watch the film.">
+<meta name="theme-color" content="#040506">
+<script src="mobile-film.js"></script>
+<title>Aurelis Film | ALPHA — Define Your Time</title>
+<link rel="icon" type="image/png" href="alpha-favicon.png">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: { ink:'#0A0C10', ivory:'#F4EFE4', gold:'#D4AF6E' },
+    fontFamily: { serif:['"Cormorant Garamond"','serif'], sans:['Jost','sans-serif'] }
+  } }
+}
+</script>
+
+<style>
+:root{--ink:#040506;--gold:#D4AF6E;--ivory:#F4EFE4}
+*{box-sizing:border-box}
+html{background:var(--ink)}
+body{margin:0;background:var(--ink);color:var(--ivory);font-family:Jost,sans-serif;overflow-x:hidden;min-height:100vh;display:flex;flex-direction:column}
+::selection{background:var(--gold);color:#0A0C10}
+.serif{font-family:"Cormorant Garamond",serif}
+.gold{color:var(--gold)}
+.mini-label{font-size:9px;letter-spacing:.42em;color:var(--gold)}
+.navbar{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(4,5,6,.6);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-bottom:1px solid rgba(212,175,110,.12)}
+.navlink{position:relative}
+.navlink:after{content:"";position:absolute;left:0;right:0;bottom:-7px;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:right;transition:transform .45s cubic-bezier(.22,1,.36,1)}
+.navlink:hover:after,.navlink[aria-current=page]:after{transform:scaleX(1);transform-origin:left}
+
+main{flex:1;padding:calc(env(safe-area-inset-top,0px) + 108px) 0 70px;background:radial-gradient(ellipse at 50% 0%,rgba(212,175,110,.08),transparent 60%)}
+.player{position:relative;width:100%;aspect-ratio:16/9;background:#000;border:1px solid rgba(212,175,110,.22);box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.btn{display:inline-block;border:1px solid var(--gold);color:var(--gold);padding:15px 28px;font-size:10px;letter-spacing:.34em;transition:background .3s,color .3s;text-align:center}
+.btn:hover{background:var(--gold);color:#0A0C10}
+.btn.ghost{border-color:rgba(244,239,228,.2);color:rgba(244,239,228,.65)}
+.btn.ghost:hover{border-color:var(--gold);background:transparent;color:var(--gold)}
+@media(max-width:767px){
+  .player{width:calc(100% + 48px);margin-left:-24px;margin-right:-24px;border-left:0;border-right:0}
+  .btn{width:100%}
+}
+</style>
+</head>
+
+<body>
+<header id="navbar" class="navbar">
+  <nav class="max-w-7xl mx-auto px-6 lg:px-10 py-5 flex items-center justify-between" aria-label="Main">
+    <a href="index.html" aria-label="Alpha Watches home"><img src="alpha-logo.png" alt="ALPHA Watches" width="155" height="52" class="w-[125px] md:w-[155px] h-auto"></a>
+    <div class="hidden lg:flex items-center gap-8 text-[10px] tracking-[.25em] text-ivory/70">
+      <a class="navlink hover:text-gold transition-colors" href="index.html">HOME</a>
+      <a class="navlink hover:text-gold transition-colors" href="index.html#collection">COLLECTION</a>
+      <a class="navlink hover:text-gold transition-colors" href="models.html">3D MODELS</a>
+      <a class="navlink hover:text-gold transition-colors" href="celestia.html">CELESTIA</a>
+      <a class="navlink text-gold" href="aurelis-film.html" aria-current="page">AURELIS FILM</a>
+      <a class="navlink hover:text-gold transition-colors" href="feedback.html">FEEDBACK</a>
+      <a class="navlink hover:text-gold transition-colors" href="enquiries.html">ENQUIRY ACTIVITY</a>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="index.html#appointment" class="hidden sm:block text-[9px] tracking-[.4em] text-gold border border-gold/50 px-5 py-2.5 hover:bg-gold hover:text-ink transition-colors">BOOK AN ENQUIRY</a>
+      <button id="menuBtn" class="lg:hidden menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span></button>
+    </div>
+  </nav>
+</header>
+
+<div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+  <a href="index.html">HOME</a>
+  <a href="index.html#collection">COLLECTION</a>
+  <a href="models.html">3D MODELS</a>
+  <a href="aurelis-film.html" aria-current="page">AURELIS FILM</a>
+  <a href="feedback.html">FEEDBACK</a>
+  <a href="enquiries.html">ENQUIRY ACTIVITY</a>
+  <a href="index.html#appointment" class="gold">BOOK AN ENQUIRY</a>
+</div>
+
+<main>
+  <div class="max-w-5xl mx-auto px-6 lg:px-10">
+    <p class="mini-label mb-4">ALPHA / AURELIS</p>
+    <h1 class="serif text-5xl md:text-7xl leading-[.9]">The <em class="gold">Aurelis</em> film.</h1>
+
+    <div class="player mt-9 md:mt-12">
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/VzG_kSwElXQ?rel=0&amp;playsinline=1&amp;modestbranding=1"
+        title="Alpha Aurelis — film"
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen></iframe>
+    </div>
+
+    <p class="mt-8 flex items-baseline gap-3"><span class="text-[9px] tracking-[.4em] text-ivory/40">FROM</span><span class="serif text-4xl gold">₹18,500</span></p>
+
+    <div class="mt-6 flex flex-col sm:flex-row gap-3">
+      <a href="index.html#appointment" class="btn">ENQUIRE ABOUT AURELIS</a>
+      <a href="models.html#aurelis" class="btn ghost">EXPLORE IN 3D</a>
+      <a href="celestia.html" class="btn ghost celestia-link">CELESTIA FILM</a>
+    </div>
+  </div>
+</main>
+
+<footer class="border-t border-gold/15 bg-[#0D0D0F] py-10">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col md:flex-row items-center justify-between gap-5">
+    <a href="index.html"><img src="alpha-logo.png" alt="ALPHA" width="155" height="52" class="w-[125px] md:w-[155px] h-auto opacity-85"></a>
+    <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-[9px] tracking-[.25em] text-ivory/35">
+      <a href="index.html" class="hover:text-gold transition-colors">HOME</a>
+      <a href="models.html" class="hover:text-gold transition-colors">3D MODELS</a>
+      <a href="feedback.html" class="hover:text-gold transition-colors">FEEDBACK</a>
+      <a href="index.html#appointment" class="hover:text-gold transition-colors">BOOK AN ENQUIRY</a>
+      <span>© 2026 ALPHA WATCHES</span>
+    </div>
+  </div>
+</footer>
+
+<script src="nav.js"></script>
+<script src="fx.js" defer></script>
+</body>
+</html>

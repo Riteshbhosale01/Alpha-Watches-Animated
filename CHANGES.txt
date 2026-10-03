@@ -31,3 +31,62 @@ FIXES
 
 NOTE: open the site through a web server (VS Code Live Server or `python -m http.server`)
 so the 3D model and Celestia frames load.
+
+
+UPDATE 2 (this revision)
+========================
+- Removed the "SCROLL" cue from the home hero and from Celestia (and the "Scroll to watch it turn." sentence).
+  The first Celestia caption now shows straight away on load.
+- Celestia on phones: the film is now pinned by script (position:fixed) instead of position:sticky, which iOS Safari
+  breaks when the page body has overflow-x:hidden. Body now uses overflow-x:clip where supported.
+- Promo video on phones: edge-to-edge, loads a lighter 480p file (promo-m.mp4, 0.65 MB instead of 1.4 MB),
+  starts only when it scrolls into view, tap-to-play if the phone blocks autoplay.
+- Aurelis_Model.glb: 20.3 MB -> 11.6 MB. The three 4096x4096 textures are now 2048x2048 (10.4 MB -> 1.7 MB,
+  and about 270 MB -> 67 MB of GPU memory). Geometry is untouched (still 1.0 M vertices / 1.9 M triangles).
+  Phones now render without antialiasing and at a pixel ratio of 1.5 for a smoother 3D viewer.
+
+
+UPDATE 3
+========
+- Phones no longer get the Celestia scroll film. New page aurelis-film.html embeds the Aurelis YouTube film
+  (youtube-nocookie.com, video id VzG_kSwElXQ).
+- mobile-film.js (loaded on every page): on phones (width <= 767px, or touch screens up to 1024px)
+  * celestia.html redirects to aurelis-film.html before any frame is downloaded (old links/bookmarks keep working)
+  * every "CELESTIA" / "CELESTIA FILM" link in menus, hero buttons and footers points to aurelis-film.html
+    and is renamed "AURELIS FILM"
+  * the 3D Models page sends the Celestia card's film button to the Aurelis film
+- Desktop is unchanged: celestia.html and its scroll film still work there.
+- To change the video later, edit the iframe src in aurelis-film.html.
+
+
+UPDATE 4
+========
+- PC / laptop: both films are available. Desktop menus show CELESTIA and AURELIS FILM; the home hero and footers
+  list both; the Aurelis panel in 3D Models has a "WATCH THE FILM" button.
+- Phones: only the Aurelis film. The hamburger menu on every page now lists AURELIS FILM (no Celestia), written
+  directly into the HTML so it never depends on device detection. Anything marked class="celestia-link" is
+  hidden on phones, and celestia.html still redirects phones to aurelis-film.html (also when a browser window
+  is resized / device mode is toggled without reloading).
+- Prices: every watch now shows "From ₹6,000" (home collection cards, 3D Models panel, Celestia page, Aurelis film page).
+  To give a watch its own price: home page = edit the "₹6,000" in its card; 3D Models page = change price:'₹6,000'
+  on its entry in the MODELS list.
+- Footer > Collection: Sovereign / Aurelis / Azure now open the 3D Models page on that watch
+  (models.html#sovereign, #aurelis, #azure).
+
+
+UPDATE 5
+========
+- 3D models now live for Sovereign (Sovereign_Model.glb), Azure (Azure_Model.glb) and Celestia (Celestia_Model.glb), plus Aurelis.
+  Oyster has no .glb yet: set glb:'YourFile.glb' on its entry in the MODELS list in models.html when you have one.
+- Azure uses Draco compression, so models.html now loads three.js's DRACOLoader as well as the meshopt decoder.
+- Phone "tap to load" label shows each model's real size (17-24 MB) instead of a fixed 12 MB. Edit mb:xx in MODELS if a file changes.
+- Prices (from, INR): Sovereign 10,000 / Oyster 12,500 / Azure 15,000 / Aurelis 18,500 / Celestia 24,000
+  (home cards, 3D Models, Celestia page, Aurelis film page).
+- Removed duplicate Sovereign.glb (identical to Sovereign_Model.glb). Hero label now reads AURELIS / 02 to match the collection.
+- Model names added under the Oyster and Azure photos on the home page; collection cards show a VIEW IN 3D cue.
+
+
+UPDATE 6
+========
+- Oyster 3D model added (Oyster_Model.glb, ~20 MB, same compression as Aurelis/Sovereign/Celestia, so no new decoder needed).
+  All five watches are now live in 3D. Home page: the Oyster photo label and the footer Collection list now link to models.html#oyster.
